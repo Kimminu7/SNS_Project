@@ -2,6 +2,7 @@ package org.example.snsprojcet.domain.board.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "board")
 public class Board {
 
@@ -22,7 +24,7 @@ public class Board {
 //    @JoinColumn(name = "user_id")
 //    private User user;
     @Column(nullable = false)
-    private String nickName;
+    private String nickname;
 
     // 제목
     @Column(nullable = false)
@@ -34,12 +36,23 @@ public class Board {
 
     // 작성일
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     // 수정일
-    @Column(nullable = false)
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    public Board(String title, String nickname, String contents) {
+        this.title = title;
+        this.nickname = nickname;
+        this.contents = contents;
+        createdAt = LocalDateTime.now();
+    }
+
+    public void update(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+        updatedAt = LocalDateTime.now();
+    }
 }

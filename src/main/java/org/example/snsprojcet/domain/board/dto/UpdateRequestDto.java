@@ -3,17 +3,14 @@ package org.example.snsprojcet.domain.board.dto;
 import lombok.Getter;
 
 @Getter
-public class CreateBoardRequestDto {
+public class UpdateRequestDto {
 
     private final String title;
 
-    private final String nickname;
-
     private final String contents;
 
-    public CreateBoardRequestDto(String title, String nickname, String contents) {
+    public UpdateRequestDto(String title, String contents) {
         this.title = title;
-        this.nickname = nickname;
         this.contents = contents;
     }
 }
