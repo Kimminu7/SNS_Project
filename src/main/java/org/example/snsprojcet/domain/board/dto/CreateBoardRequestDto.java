@@ -1,4 +1,4 @@
-package org.example.snsprojcet.dto.boarddto;
+package org.example.snsprojcet.domain.board.dto;
 
 import lombok.Getter;
 
@@ -7,13 +7,13 @@ public class CreateBoardRequestDto {
 
     private final String title;
 
-    private final String userName;
+    private final String nickName;
 
     private final String contents;
 
-    public CreateBoardRequestDto(String title, String userName, String contents) {
+    public CreateBoardRequestDto(String title, String nickName, String contents) {
         this.title = title;
-        this.userName = userName;
+        this.nickName = nickName;
         this.contents = contents;
     }
 }

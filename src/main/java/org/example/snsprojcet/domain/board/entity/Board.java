@@ -1,4 +1,4 @@
-package org.example.snsprojcet.entity;
+package org.example.snsprojcet.domain.board.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class Board {
 //    @JoinColumn(name = "user_id")
 //    private User user;
     @Column(nullable = false)
-    private String userName;
+    private String nickName;
 
     // 제목
     @Column(nullable = false)
