@@ -25,7 +25,6 @@ public class Board {
     @JoinColumn(name = "user_id")
     private User user;
 
-
     // 제목
     @Column(nullable = false)
     private String title;
@@ -43,9 +42,10 @@ public class Board {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Board(String contents, String title) {
+    public Board(String contents, String title, User user) {
         this.title = title;
         this.contents = contents;
+        this.user = user;
         createdAt = LocalDateTime.now();
     }
 

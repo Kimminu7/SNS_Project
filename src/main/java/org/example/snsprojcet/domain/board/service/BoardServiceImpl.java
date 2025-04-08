@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.domain.board.dto.BoardResponseDto;
 import org.example.snsprojcet.domain.board.entity.Board;
 import org.example.snsprojcet.domain.board.repository.BoardRepository;
+import org.example.snsprojcet.domain.user.entity.User;
+import org.example.snsprojcet.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,16 +15,19 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService{
 
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     // 게시판 생성
     @Override
     public BoardResponseDto createBoard(Long userId, String title, String contents) {
 
-        Board board = new Board(title, contents);
+        User findUser = userRepository.findByIdOrElseThorw(userId);
+
+        Board board = new Board(title, contents, findUser);
 
         Board savedBoard = boardRepository.save(board);
 
-        return new BoardResponseDto(savedBoard.getId(), savedBoard.getTitle(), savedBoard.getUser().getNickname(), savedBoard.getContents(), savedBoard.getCreatedAt(), savedBoard.getUpdatedAt());
+        return new BoardResponseDto(savedBoard.getId(), savedBoard.getTitle(), savedBoard.getUser().getNickname(), savedBoard.getUser().getNickname(), savedBoard.getCreatedAt(), savedBoard.getUpdatedAt());
     }
 
     // 게시판 전체 조회
