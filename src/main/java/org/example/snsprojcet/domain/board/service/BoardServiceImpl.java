@@ -15,6 +15,7 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService{
 
     private final BoardRepository boardRepository;
+    // 가입된 user를 조회하기 위함. ( 회원인 유저만 게시판 기능 이용 가능 )
     private final UserRepository userRepository;
 
     // 게시판 생성
