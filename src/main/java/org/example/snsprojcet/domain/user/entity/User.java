@@ -41,7 +41,7 @@ public class User {
     @Column(nullable = false)
     private String introduction;
 
-    // 탈퇴 여부
+    // 활동 상태(false -> 탈퇴O, true -> 탈퇴X)
     @Column
     private Boolean activated;
 

@@ -19,6 +19,10 @@ public class AuthService {
     public LoginResponseDto login(String email, String password) {
         // email로 user 조회
         User userByEmailOrElseThrow = userRepository.findUserByEmailOrElseThrow(email);
+        // 회원 탈퇴시 email 사용 불가.
+        if (!userByEmailOrElseThrow.getActivated()) {
+            throw new RuntimeException("탈퇴한 email입니다.");
+        }
         // 저장된 password가 입력받은 password가 맞는지 검증
         boolean matchedPassword = passwordEncoder.match(password, userByEmailOrElseThrow.getPassword());
         // 일치하지 않을 때

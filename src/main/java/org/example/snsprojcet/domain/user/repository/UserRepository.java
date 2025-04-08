@@ -14,13 +14,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findUserByEmail (String email);
 
     default User findUserByEmailOrElseThrow(String email) {
-        return findUserByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exits email = " + email));
+        return findUserByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 email 입니다."));
     }
 
     // userId로 회원 정보 찾기
     Optional<User> findUserById (Long id);
 
     default User findUserByIdOrElseThrow(Long id) {
-        return findUserById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exits id = " + id));
+        return findUserById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 id입니다."));
     }
+
+    boolean existsByEmail (String email);
 }
