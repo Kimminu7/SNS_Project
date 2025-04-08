@@ -1,13 +1,12 @@
 package org.example.snsprojcet.domain.user.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.common.config.PasswordEncoder;
 import org.example.snsprojcet.domain.user.dto.UserFindResponseDto;
-import org.example.snsprojcet.domain.user.dto.UserSignUpRequestDto;
 import org.example.snsprojcet.domain.user.dto.UserSignUpResponseDto;
 import org.example.snsprojcet.domain.user.entity.User;
 import org.example.snsprojcet.domain.user.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,5 +32,12 @@ public class UserService {
     public UserFindResponseDto findUser (Long id) {
         User userByIdOrElseThrow = userRepository.findUserByIdOrElseThrow(id);
         return new UserFindResponseDto(userByIdOrElseThrow.getId(), userByIdOrElseThrow.getName(), userByIdOrElseThrow.getAge(), userByIdOrElseThrow.getNickname(), userByIdOrElseThrow.getEmail(), userByIdOrElseThrow.getIntroduction());
+    }
+
+    // 회원 탈퇴
+    @Transactional
+    public void deleteUser(Long id) {
+        User userByIdOrElseThrow = userRepository.findUserByIdOrElseThrow(id);
+        userRepository.delete(userByIdOrElseThrow);
     }
 }

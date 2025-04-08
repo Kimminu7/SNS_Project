@@ -3,10 +3,13 @@ package org.example.snsprojcet.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Table(name = "user")
 @Getter
+// 소프트 delete
+@SQLDelete(sql ="UPDATE user SET activated = false WHERE id = ?")
 public class User {
 
     // 기본키
@@ -38,6 +41,10 @@ public class User {
     @Column(nullable = false)
     private String introduction;
 
+    // 탈퇴 여부
+    @Column
+    private Boolean activated;
+
     // 기본 생성자
     public User(){}
 
@@ -48,5 +55,6 @@ public class User {
         this.email = email;
         this.password = password;
         this.introduction = introduction;
+        this.activated = true;
     }
 }
