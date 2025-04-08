@@ -22,12 +22,10 @@ public class User {
     private String password;
 
     public User(String username) {
-        this.id = id;
         this.username = username;
-        this.password = password;
     }
 
     public User(Long id) {
-
+        this.id = id;
     }
 }

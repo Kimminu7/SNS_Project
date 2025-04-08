@@ -1,7 +1,7 @@
 package org.example.snsprojcet.friend.enums;
 
 public enum FriendStatus {
-    PENDING,
-    ACCEPTED,
-    REJECTED
+    PENDING,//대기
+    ACCEPTED,//수락
+    REJECTED//거절
 }
