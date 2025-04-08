@@ -5,6 +5,10 @@ import org.example.snsprojcet.domain.board.dto.BoardResponseDto;
 import org.example.snsprojcet.domain.board.dto.CreateBoardRequestDto;
 import org.example.snsprojcet.domain.board.dto.UpdateRequestDto;
 import org.example.snsprojcet.domain.board.service.BoardService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +36,11 @@ public class BoardController {
 
     // 게시판 전체 조회
     @GetMapping
-    public ResponseEntity<List<BoardResponseDto>> findAll() {
+    public ResponseEntity<Page<BoardResponseDto>> findAll(
+            @PageableDefault(direction = Sort.Direction.DESC, sort = "createdAt") Pageable pageable
+    ) {
 
-        List<BoardResponseDto> responseDtoList = boardService.findAll();
+        Page<BoardResponseDto> responseDtoList = boardService.findAll(pageable);
 
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }

@@ -6,6 +6,8 @@ import org.example.snsprojcet.domain.board.entity.Board;
 import org.example.snsprojcet.domain.board.repository.BoardRepository;
 import org.example.snsprojcet.domain.user.entity.User;
 import org.example.snsprojcet.domain.user.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,8 +35,8 @@ public class BoardServiceImpl implements BoardService{
 
     // 게시판 전체 조회
     @Override
-    public List<BoardResponseDto> findAll() {
-        return boardRepository.findAllByOrderByCreatedAtDesc().stream().map(BoardResponseDto::toDto).toList();
+    public Page<BoardResponseDto> findAll(Pageable pageable) {
+        return boardRepository.findAll(pageable).map(BoardResponseDto::toDto);
     }
 
     // 게시판 단건 조회

@@ -9,8 +9,11 @@ public class UpdateRequestDto {
 
     private final String contents;
 
-    public UpdateRequestDto(String title, String contents) {
+    private final String email;
+
+    public UpdateRequestDto(String title, String contents, String email) {
         this.title = title;
         this.contents = contents;
+        this.email = email;
     }
 }
