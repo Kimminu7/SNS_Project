@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
@@ -17,9 +15,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     default Board findByIdOrElseThrow(Long id) {
         return findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재 하지 않는 ID = " + id));
     }
-
-    // Spring Data JPA가 지원해주는 쿼리 메소드, 생성일자 기준으로 내림차순 정렬.
-    List<Board> findAllByOrderByCreatedAtDesc();
 
     // 이미 정렬된 pageable 객체를 파라미터로 사용하면 findAll로 전체 데이터를 가져올때 정렬된 데이터를 얻을 수 있음.
     Page<Board> findAll(Pageable pageable);
