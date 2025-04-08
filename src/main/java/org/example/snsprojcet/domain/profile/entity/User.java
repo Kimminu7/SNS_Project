@@ -15,7 +15,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     // 기본키
-
     private Long id;
 
     // 이름
