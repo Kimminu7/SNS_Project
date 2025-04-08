@@ -9,7 +9,6 @@ import org.example.snsprojcet.friend.service.FriendService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,8 +21,8 @@ public class FriendController {
 
     // 친구 요청 보내기
     @PostMapping("/request")
-    public ResponseEntity<FriendResponseDto> sendFriendRequest(@RequestBody FriendRequestDto dto, Principal principal) {
-        User user = getLoginUser(principal); // 로그인 사용자 받아오기
+    public ResponseEntity<FriendResponseDto> sendFriendRequest(@RequestBody FriendRequestDto dto, User user) {
+        User loginUser  = getLoginUser(user); // 로그인 사용자 받아오기
         User receiver = getUserById(dto.getReceiverId()); // 수신자 유저 받아오기
 
         Friend friend = friendService.sendFriendRequest(user, receiver);
@@ -45,16 +44,16 @@ public class FriendController {
     }
     // 친구 삭제
     @DeleteMapping("/{friendId}")
-    public ResponseEntity<String> deleteFriend(@PathVariable Long friendId, Principal principal) {
-        User user = getLoginUser(principal);
-        friendService.deleteFriend(friendId, user);
+    public ResponseEntity<String> deleteFriend(@PathVariable Long friendId, User user) {
+        User loginUser  = getLoginUser(user);
+        friendService.deleteFriend(friendId, loginUser);
         return ResponseEntity.ok("친구가 삭제되었습니다.");
     }
 
     // 보낸 요청 목록
     @GetMapping("/sent")
-    public ResponseEntity<List<FriendResponseDto>> sentRequests(Principal principal) {
-        User user = getLoginUser(principal);
+    public ResponseEntity<List<FriendResponseDto>> sentRequests(User user) {
+        User loginUser  = getLoginUser(user);
         List<FriendResponseDto> list =
                 friendService
                         .getSentRequests(user)
@@ -67,16 +66,17 @@ public class FriendController {
 
     // 받은 요청 목록
     @GetMapping("/received")
-    public ResponseEntity<List<FriendResponseDto>> receivedRequests(Principal principal) {
-        User user = getLoginUser(principal);
-        List<FriendResponseDto> list = friendService.getReceivedRequests(user)
+    public ResponseEntity<List<FriendResponseDto>> receivedRequests(User user) {
+        User loginUser  = getLoginUser(user);
+        List<FriendResponseDto> list = friendService.getReceivedRequests(loginUser)
                 .stream().map(FriendResponseDto::new).collect(Collectors.toList());
         return ResponseEntity.ok(list);
     }
+    
     @GetMapping("/{friendId}/list")
-    public ResponseEntity<List<FriendResponseDto>> getFriendList(Principal principal) {
-        User user = getLoginUser(principal);
-        List<User> friends = friendService.getFriendList(user);
+    public ResponseEntity<List<FriendResponseDto>> getFriendList(User user) {
+        User loginUser  = getLoginUser(user);
+        List<User> friends = friendService.getFriendList(loginUser);
 
         List<FriendResponseDto> list = friends.stream()
                 .map(FriendResponseDto::fromUser)
@@ -86,9 +86,9 @@ public class FriendController {
     }
 
     // 실제 구현 시에는 로그인 유저 정보나 UserService에서 받아와야 함 수정 해야하는 사항 이름 가져오기
-    private User getLoginUser(Principal principal) {
+    private User getLoginUser(User user) {
         //  UserService에서 가져와야 함
-        return new User(principal.getName());
+        return new User(user.getUsername());
         // userservice.findByUserName()그런식으로
     }
     //임시 수신자 정보 가져오기
