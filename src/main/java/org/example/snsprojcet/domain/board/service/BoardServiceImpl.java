@@ -34,7 +34,7 @@ public class BoardServiceImpl implements BoardService{
     // 게시판 전체 조회
     @Override
     public List<BoardResponseDto> findAll() {
-        return boardRepository.findAll().stream().map(BoardResponseDto::toDto).toList();
+        return boardRepository.findAllByOrderByCreatedAtDesc().stream().map(BoardResponseDto::toDto).toList();
     }
 
     // 게시판 단건 조회
