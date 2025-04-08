@@ -53,7 +53,7 @@ public class FriendController {
     // 보낸 요청 목록
     @GetMapping("/sent")
     public ResponseEntity<List<FriendResponseDto>> sentRequests(User user) {
-        User loginUser  = getLoginUser(user);
+        User loginUser = getLoginUser(user);
         List<FriendResponseDto> list =
                 friendService
                         .getSentRequests(loginUser)
