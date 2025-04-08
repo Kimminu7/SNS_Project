@@ -42,4 +42,16 @@ public class AuthController {
         session.setAttribute("userId", findUser);
         return new ResponseEntity<>(login, HttpStatus.OK);
     }
+
+    // 로그아웃
+    @PostMapping("/logout")
+    public String logout (HttpServletRequest servletRequest) {
+        // 로그인이 아닐 시 HttpSession이 null 값 반환
+        HttpSession session = servletRequest.getSession(false);
+        // 세션이 있으면 로그인 된 경우
+        if (session != null) {
+            session.invalidate(); // 세션 삭제
+        }
+        return "로그아웃에 성공!";
+    }
 }
