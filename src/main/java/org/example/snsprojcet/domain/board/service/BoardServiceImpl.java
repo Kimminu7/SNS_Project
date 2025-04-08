@@ -28,7 +28,7 @@ public class BoardServiceImpl implements BoardService{
 
         Board savedBoard = boardRepository.save(board);
 
-        return new BoardResponseDto(savedBoard.getId(), savedBoard.getTitle(), savedBoard.getUser().getNickname(), savedBoard.getUser().getNickname(), savedBoard.getCreatedAt(), savedBoard.getUpdatedAt());
+        return new BoardResponseDto(savedBoard.getId(), savedBoard.getTitle(), savedBoard.getUser().getNickname(), savedBoard.getContents(), savedBoard.getCreatedAt(), savedBoard.getUpdatedAt());
     }
 
     // 게시판 전체 조회

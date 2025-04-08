@@ -30,7 +30,7 @@ public class Board {
     private String title;
 
     // 내용
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "longtext")
     private String contents;
 
     // 작성일
@@ -42,7 +42,7 @@ public class Board {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Board(String contents, String title, User user) {
+    public Board(String title, String contents, User user) {
         this.title = title;
         this.contents = contents;
         this.user = user;
