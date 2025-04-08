@@ -34,7 +34,7 @@ public class User {
     private String email;
 
     // 비밀번호
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String password;
 
     // 소개글
@@ -52,4 +52,6 @@ public class User {
         this.password = password;
         this.introduction = introduction;
     }
+
+    public void updatePassword(String password) { this.password = password; }
 }

@@ -2,14 +2,12 @@ package org.example.snsprojcet.domain.profile.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.domain.profile.dto.FriendResponseDto;
+import org.example.snsprojcet.domain.profile.dto.UpdatePasswordRequestDto;
 import org.example.snsprojcet.domain.profile.dto.UserResponseDto;
 import org.example.snsprojcet.domain.profile.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -33,6 +31,18 @@ public class UserController {
         FriendResponseDto friendResponseDto = userService.findFriendById(id);
 
         return new ResponseEntity<>(friendResponseDto, HttpStatus.OK);
+    }
+
+    // 유저 프로필(비밀번호) 수정
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updatePassword(
+            @PathVariable Long id,
+            @RequestBody UpdatePasswordRequestDto requestDto
+    ) {
+
+        userService.updatePassword(id, requestDto.getOldPassword(), requestDto.getNewPassword());
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
