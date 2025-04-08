@@ -3,6 +3,7 @@ package org.example.snsprojcet.domain.board.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.snsprojcet.domain.user.entity.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -20,11 +21,10 @@ public class Board {
     private Long id;
 
     // 유저 ID
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
-    @Column(nullable = false)
-    private String nickname;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
     // 제목
     @Column(nullable = false)
@@ -43,9 +43,8 @@ public class Board {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Board(String title, String nickname, String contents) {
+    public Board(String contents, String title) {
         this.title = title;
-        this.nickname = nickname;
         this.contents = contents;
         createdAt = LocalDateTime.now();
     }

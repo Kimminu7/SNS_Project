@@ -20,9 +20,12 @@ public class BoardController {
 
     // 게시판 생성
     @PostMapping
-    public ResponseEntity<BoardResponseDto> createBoard(@RequestBody CreateBoardRequestDto requestDto) {
+    public ResponseEntity<BoardResponseDto> createBoard(
+            @RequestParam Long userId,
+            @RequestBody CreateBoardRequestDto requestDto
+    ) {
 
-        BoardResponseDto responseDto = boardService.createBoard(requestDto.getTitle(), requestDto.getNickname(), requestDto.getContents());
+        BoardResponseDto responseDto = boardService.createBoard(userId, requestDto.getTitle(), requestDto.getContents());
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }

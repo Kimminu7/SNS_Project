@@ -16,13 +16,13 @@ public class BoardServiceImpl implements BoardService{
 
     // 게시판 생성
     @Override
-    public BoardResponseDto createBoard(String title, String nickName, String contents) {
+    public BoardResponseDto createBoard(Long userId, String title, String contents) {
 
-        Board board = new Board(title, nickName, contents);
+        Board board = new Board(title, contents);
 
         Board savedBoard = boardRepository.save(board);
 
-        return new BoardResponseDto(savedBoard.getId(), savedBoard.getTitle(), savedBoard.getNickname(), savedBoard.getContents(), savedBoard.getCreatedAt(), savedBoard.getUpdatedAt());
+        return new BoardResponseDto(savedBoard.getId(), savedBoard.getTitle(), savedBoard.getUser().getNickname(), savedBoard.getContents(), savedBoard.getCreatedAt(), savedBoard.getUpdatedAt());
     }
 
     // 게시판 전체 조회
@@ -37,7 +37,7 @@ public class BoardServiceImpl implements BoardService{
 
         Board findBoard = boardRepository.findByIdOrElseThrow(id);
 
-        return new BoardResponseDto(findBoard.getId(), findBoard.getTitle(), findBoard.getNickname(), findBoard.getContents(), findBoard.getCreatedAt(), findBoard.getUpdatedAt());
+        return new BoardResponseDto(findBoard.getId(), findBoard.getTitle(), findBoard.getUser().getNickname(), findBoard.getContents(), findBoard.getCreatedAt(), findBoard.getUpdatedAt());
     }
 
     // 게시판 수정

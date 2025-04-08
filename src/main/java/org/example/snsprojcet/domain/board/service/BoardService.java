@@ -7,7 +7,7 @@ import java.util.List;
 public interface BoardService {
 
     // 게시판 생성
-    BoardResponseDto createBoard(String title, String nickName, String contents);
+    BoardResponseDto createBoard(Long userId, String title, String contents);
     // 게시판 전체 조회
     List<BoardResponseDto> findAll();
     // 게시판 단건 조회

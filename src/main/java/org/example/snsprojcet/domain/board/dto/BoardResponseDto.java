@@ -30,6 +30,6 @@ public class BoardResponseDto {
     }
 
     public static BoardResponseDto toDto(Board board) {
-        return new BoardResponseDto(board.getId(), board.getTitle(), board.getNickname(), board.getContents(), board.getCreatedAt(), board.getUpdatedAt());
+        return new BoardResponseDto(board.getId(), board.getTitle(), board.getUser().getNickname(), board.getContents(), board.getCreatedAt(), board.getUpdatedAt());
     }
 }

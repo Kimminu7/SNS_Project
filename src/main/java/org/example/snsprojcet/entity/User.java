@@ -1,4 +1,0 @@
-package org.example.snsprojcet.entity;
-
-public class User {
-}
