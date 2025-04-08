@@ -1,6 +1,5 @@
 package org.example.snsprojcet.friend.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.friend.entity.Friend;
 import org.example.snsprojcet.friend.entity.User;
@@ -9,7 +8,7 @@ import org.example.snsprojcet.friend.repository.FriendRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.AccessDeniedException;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,7 +63,7 @@ public class FriendService {
                 .orElseThrow(() -> new RuntimeException("친구 관계를 찾을 수 없습니다."));
 
         if (!friend.getUserrequest().equals(currentUser) && !friend.getUserreceiver().equals(currentUser)) {
-            throw new RuntimeException("이 친구 관계를 삭제할 권한이 없습니다.");
+            throw new RuntimeException("이 친구 관계에 없는 사람입니다.");
         }
 
         if (friend.getStatus() != FriendStatus.ACCEPTED) {
