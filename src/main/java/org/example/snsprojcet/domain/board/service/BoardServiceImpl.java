@@ -22,7 +22,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public BoardResponseDto createBoard(Long userId, String title, String contents) {
 
-        User findUser = userRepository.findByIdOrElseThorw(userId);
+        User findUser = userRepository.findUserByIdOrElseThrow(userId);
 
         Board board = new Board(title, contents, findUser);
 
