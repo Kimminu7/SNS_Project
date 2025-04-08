@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.snsprojcet.domain.friend.enums.FriendStatus;
+import org.example.snsprojcet.domain.user.entity.User;
 
 @NoArgsConstructor
 @Getter

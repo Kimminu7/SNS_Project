@@ -2,9 +2,9 @@ package org.example.snsprojcet.domain.friend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.domain.friend.entity.Friend;
-import org.example.snsprojcet.domain.friend.entity.User;
 import org.example.snsprojcet.domain.friend.enums.FriendStatus;
 import org.example.snsprojcet.domain.friend.repository.FriendRepository;
+import org.example.snsprojcet.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

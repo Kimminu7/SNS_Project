@@ -57,4 +57,5 @@ public class User {
         this.introduction = introduction;
         this.activated = true;
     }
+
 }

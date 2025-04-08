@@ -1,8 +1,8 @@
 package org.example.snsprojcet.domain.friend.repository;
 
 import org.example.snsprojcet.domain.friend.entity.Friend;
-import org.example.snsprojcet.domain.friend.entity.User;
 import org.example.snsprojcet.domain.friend.enums.FriendStatus;
+import org.example.snsprojcet.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
