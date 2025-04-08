@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.domain.auth.dto.LoginRequestDto;
 import org.example.snsprojcet.domain.auth.dto.LoginResponseDto;
 import org.example.snsprojcet.domain.auth.service.AuthService;
-import org.example.snsprojcet.domain.user.dto.UserFindResponseDto;
 import org.example.snsprojcet.domain.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserService userService;
 
     // 로그인
     @PostMapping("/login")
@@ -36,10 +34,8 @@ public class AuthController {
         // 로그인 성공 로직
         // 세션이 존재하면 기존 session 반환, 세션이 없으면 새로운 session 생성
         HttpSession session = servletRequest.getSession();
-        // 모든 정보가 담겨있는 회원 조회
-        UserFindResponseDto findUser = userService.findUser(id);
         // session에 로그인 회원 정보 저장
-        session.setAttribute("userId", findUser);
+        session.setAttribute("userId", login);
         return new ResponseEntity<>(login, HttpStatus.OK);
     }
 

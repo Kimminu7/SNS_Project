@@ -3,7 +3,6 @@ package org.example.snsprojcet.domain.user.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.common.config.PasswordEncoder;
-import org.example.snsprojcet.domain.user.dto.UserFindResponseDto;
 import org.example.snsprojcet.domain.user.dto.UserSignUpResponseDto;
 import org.example.snsprojcet.domain.user.entity.User;
 import org.example.snsprojcet.domain.user.repository.UserRepository;
@@ -32,12 +31,6 @@ public class UserService {
         User userSignUp = userRepository.save(user);
         return new UserSignUpResponseDto(userSignUp.getId(), userSignUp.getName(), userSignUp.getAge(), userSignUp.getNickname(), userSignUp.getEmail(), userSignUp.getIntroduction());
 
-    }
-
-    // 회원 정보 조회
-    public UserFindResponseDto findUser (Long id) {
-        User userByIdOrElseThrow = userRepository.findUserByIdOrElseThrow(id);
-        return new UserFindResponseDto(userByIdOrElseThrow.getId(), userByIdOrElseThrow.getName(), userByIdOrElseThrow.getAge(), userByIdOrElseThrow.getNickname(), userByIdOrElseThrow.getEmail(), userByIdOrElseThrow.getIntroduction());
     }
 
     // 회원 탈퇴
