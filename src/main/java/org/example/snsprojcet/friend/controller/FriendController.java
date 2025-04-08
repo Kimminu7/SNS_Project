@@ -25,7 +25,7 @@ public class FriendController {
         User loginUser  = getLoginUser(user); // 로그인 사용자 받아오기
         User receiver = getUserById(dto.getReceiverId()); // 수신자 유저 받아오기
 
-        Friend friend = friendService.sendFriendRequest(user, receiver);
+        Friend friend = friendService.sendFriendRequest(loginUser, receiver);
         return ResponseEntity.ok(new FriendResponseDto(friend));
     }
 
@@ -56,7 +56,7 @@ public class FriendController {
         User loginUser  = getLoginUser(user);
         List<FriendResponseDto> list =
                 friendService
-                        .getSentRequests(user)
+                        .getSentRequests(loginUser)
                         .stream()
                         .map(FriendResponseDto::new)
                         .collect(Collectors.toList()
@@ -72,7 +72,8 @@ public class FriendController {
                 .stream().map(FriendResponseDto::new).collect(Collectors.toList());
         return ResponseEntity.ok(list);
     }
-    
+
+    //친구목록
     @GetMapping("/{friendId}/list")
     public ResponseEntity<List<FriendResponseDto>> getFriendList(User user) {
         User loginUser  = getLoginUser(user);
