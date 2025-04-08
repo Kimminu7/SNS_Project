@@ -7,7 +7,6 @@ import org.example.snsprojcet.domain.friend.entity.Friend;
 import org.example.snsprojcet.domain.friend.service.FriendService;
 import org.example.snsprojcet.domain.user.entity.User;
 import org.example.snsprojcet.domain.user.repository.UserRepository;
-import org.example.snsprojcet.domain.user.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 public class FriendController {
 
     private final FriendService friendService;
-    private final UserService userService;
     private final UserRepository userRepository;
 
     // 친구 요청 보내기
@@ -78,7 +76,7 @@ public class FriendController {
     }
 
     //친구목록
-    @GetMapping("/{friendId}/list")
+    @GetMapping("/list")
     public ResponseEntity<List<FriendResponseDto>> getFriendList(User user) {
         User loginUser  = getLoginUser(user);
         List<User> friends = friendService.getFriendList(loginUser);
@@ -93,7 +91,7 @@ public class FriendController {
     // 실제 구현 시에는 로그인 유저 정보나 UserService에서 받아와야 함 수정 해야하는 사항 이름 가져오기
     private User getLoginUser(User user) {
         //  UserService에서 가져와야 함
-        return userRepository.findUserByEmailOrElseThrow(user.getName());
+        return userRepository.findUserByEmailOrElseThrow(user.getEmail());
         // userservice.findByUserName()그런식으로
     }
     //임시 수신자 정보 가져오기
