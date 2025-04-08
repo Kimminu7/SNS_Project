@@ -2,10 +2,12 @@ package org.example.snsprojcet.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.common.config.PasswordEncoder;
+import org.example.snsprojcet.domain.user.dto.UserFindResponseDto;
 import org.example.snsprojcet.domain.user.dto.UserSignUpRequestDto;
 import org.example.snsprojcet.domain.user.dto.UserSignUpResponseDto;
 import org.example.snsprojcet.domain.user.entity.User;
 import org.example.snsprojcet.domain.user.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +18,7 @@ public class UserService {
     // encoder 접근
     private final PasswordEncoder passwordEncoder;
 
-
+    // 회원 가입
     public UserSignUpResponseDto signUp(String name, Long age, String nickname, String email, String password, String introduction) {
         // 비밀번호 암호화 실시
         String encodedPassword = passwordEncoder.encode(password);
@@ -25,5 +27,11 @@ public class UserService {
         // user 객체 저장
         User userSignUp = userRepository.save(user);
         return new UserSignUpResponseDto(userSignUp.getId(), userSignUp.getName(), userSignUp.getAge(), userSignUp.getNickname(), userSignUp.getEmail(), userSignUp.getIntroduction());
+    }
+
+    // 회원 정보 조회
+    public UserFindResponseDto findUser (Long id) {
+        User userByIdOrElseThrow = userRepository.findUserByIdOrElseThrow(id);
+        return new UserFindResponseDto(userByIdOrElseThrow.getId(), userByIdOrElseThrow.getName(), userByIdOrElseThrow.getAge(), userByIdOrElseThrow.getNickname(), userByIdOrElseThrow.getEmail(), userByIdOrElseThrow.getIntroduction());
     }
 }

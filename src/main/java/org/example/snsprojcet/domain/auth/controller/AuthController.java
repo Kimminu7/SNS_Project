@@ -1,8 +1,13 @@
 package org.example.snsprojcet.domain.auth.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.domain.auth.dto.LoginRequestDto;
+import org.example.snsprojcet.domain.auth.dto.LoginResponseDto;
 import org.example.snsprojcet.domain.auth.service.AuthService;
+import org.example.snsprojcet.domain.user.dto.UserFindResponseDto;
+import org.example.snsprojcet.domain.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,12 +19,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/authors")
 @RequiredArgsConstructor
 public class AuthController {
+
     private final AuthService authService;
+    private final UserService userService;
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<Void> login (@RequestBody LoginRequestDto requestDto) {
-        authService.login(requestDto.getEmail(), requestDto.getPassword());
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<LoginResponseDto> login (@RequestBody LoginRequestDto requestDto, HttpServletRequest servletRequest) {
+        LoginResponseDto login = authService.login(requestDto.getEmail(), requestDto.getPassword());
+        // userID 변수에 저장
+        Long id = login.getId();
+        // null 값일 시 예외처리
+        if (id == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // 로그인 성공 로직
+        // 세션이 존재하면 기존 session 반환, 세션이 없으면 새로운 session 생성
+        HttpSession session = servletRequest.getSession();
+        // 모든 정보가 담겨있는 회원 조회
+        UserFindResponseDto findUser = userService.findUser(id);
+        // session에 로그인 회원 정보 저장
+        session.setAttribute("userId", findUser);
+        return new ResponseEntity<>(login, HttpStatus.OK);
     }
 }
