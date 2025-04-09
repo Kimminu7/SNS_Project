@@ -35,7 +35,7 @@ public class AuthController {
         // 세션이 존재하면 기존 session 반환, 세션이 없으면 새로운 session 생성
         HttpSession session = servletRequest.getSession();
         // session에 로그인 회원 정보 저장
-        session.setAttribute("userId", login);
+        session.setAttribute("userId", id);
         return new ResponseEntity<>(login, HttpStatus.OK);
     }
 
