@@ -31,10 +31,14 @@ public class UserController {
     }
     // 내 프로필 조회
     @GetMapping("/profile/{userId}")
-    public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long userId) {
-        System.out.println("test");
+    public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long userId, HttpServletRequest servletRequest) {
+        // 로그인 정보 확인
+        HttpSession session = servletRequest.getSession();
+        Long myId = (Long) session.getAttribute("userId");
+        if (myId != userId) {
+            throw  new RuntimeException("존재하지 않는 ID입니다.");
+        }
         UserResponseDto userResponseDto = userService.findUserById(userId);
-
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
