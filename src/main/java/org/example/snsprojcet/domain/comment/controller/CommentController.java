@@ -39,15 +39,15 @@ public class CommentController {
     }
 
     // 특정 게시글 댓글 전체 조회
-    @GetMapping("/{commentId}")
-    public ResponseEntity<List<CommentResponseDto>> findAll(@PathVariable Long commentId) {
+    @GetMapping()
+    public ResponseEntity<List<CommentResponseDto>> findAll() {
         List<CommentResponseDto> commentResponseDtos = commentService.findAll();
 
         return new ResponseEntity<>(commentResponseDtos, HttpStatus.OK);
     }
 
     // 특정 게시글의 특정 댓글 조회
-    @PutMapping("/{commentId}")
+    @GetMapping("/{commentId}")
     public ResponseEntity<CommentResponseDto> findById (@PathVariable Long commentId){
         CommentResponseDto responseDto = commentService.findById(commentId);
 

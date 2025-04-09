@@ -25,4 +25,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     }
 
     boolean existsByEmail (String email);
+    default User findByIdOrElseThrow(Long id) {
+        return findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "비밀번호를 조회할 수 없습니다 = " + id
+                        )
+                );
+    }
 }
