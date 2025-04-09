@@ -1,5 +1,8 @@
 package org.example.snsprojcet.domain.user.dto;
 
+import lombok.Getter;
+
+@Getter
 public class AnotherUserResponseDto {
 
     private final String nickname;

@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import static org.example.snsprojcet.common.config.PasswordEncoder.match;
+
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +46,7 @@ public class UserService {
 
     // 다른 유저 찾기
     public AnotherUserResponseDto findUserByNickname(String nickname) {
-        User findAnotherUser = userRepository.findUserByNickname(nickname);
+        User findAnotherUser = userRepository.findUserByNicknameOrElseThrow(nickname);
 
         return new AnotherUserResponseDto(findAnotherUser.getNickname(), findAnotherUser.getIntroduction());
     }
@@ -56,7 +58,7 @@ public class UserService {
         User findUser = userRepository.findUserByIdOrElseThrow(userId);
 
         // 1. 현재 비밀번호 일치하지 않음
-        if (!PasswordEncoder.match(oldPassword, findUser.getPassword())) {         // 비밀번호가 해시 처리돼 있다면 PasswordEncoder.matches()를 사용해야 한다.
+        if (!match(oldPassword, findUser.getPassword())) {         // 비밀번호가 해시 처리돼 있다면 PasswordEncoder.matches()를 사용해야 한다.
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
 
@@ -66,7 +68,7 @@ public class UserService {
         }
 
         // 3. 새 비밀번호가 기존과 같은 경우
-        if (PasswordEncoder.match(newPassword, findUser.getPassword())) {
+        if (match(newPassword, findUser.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "현재 비밀번호와 다른 비밀번호를 입력해주세요.");
         }
 
@@ -86,10 +88,11 @@ public class UserService {
         // id로 유저 조회
         User userByIdOrElseThrow = userRepository.findUserByIdOrElseThrow(userId);
         // 비밀번호 검증
-        if (!passwordEncoder.match(password, userByIdOrElseThrow.getPassword())) {
+        if (!match(password, userByIdOrElseThrow.getPassword())) {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
 
         }
+        // 탈퇴한 회원의 email일 경우 다시 탈퇴 X
         if (!userByIdOrElseThrow.getActivated()) {
             throw new RuntimeException("이미 가입된 적이 있는 email입니다.");
         }
