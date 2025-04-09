@@ -18,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
     // 유저 프로필 단 건 조회
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/profile")
     public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long id) {
         UserResponseDto userResponseDto = userService.findUserById(id);
 
@@ -26,7 +26,7 @@ public class UserController {
     }
 
     // 친구 프로필 단 건 조회
-    @GetMapping("/{id}")
+    @GetMapping("/{friendId}/profile")
     public ResponseEntity<FriendResponseDto> findfriendById(@PathVariable Long id) {
         FriendResponseDto friendResponseDto = userService.findFriendById(id);
 
