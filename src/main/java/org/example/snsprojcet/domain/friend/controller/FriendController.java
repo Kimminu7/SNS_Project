@@ -53,7 +53,7 @@ public class FriendController {
     }
 
     // 보낸 요청 목록
-    @GetMapping("/sent")
+    @GetMapping("/requestList")
     public ResponseEntity<List<FriendResponseDto>> sentRequests(User user) {
         User loginUser = userService.getLoginUser(user);
         List<FriendResponseDto> list =
@@ -67,7 +67,7 @@ public class FriendController {
     }
 
     // 받은 요청 목록
-    @GetMapping("/received")
+    @GetMapping("/receivedList")
     public ResponseEntity<List<FriendResponseDto>> receivedRequests(User user) {
         User loginUser = userService.getLoginUser(user);
         List<FriendResponseDto> list = friendService.getReceivedRequests(loginUser)
@@ -76,7 +76,7 @@ public class FriendController {
     }
 
     //친구목록
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity<List<FriendResponseDto>> getFriendList(User user) {
         User loginUser = userService.getLoginUser(user);
         List<User> friends = friendService.getFriendList(loginUser);
