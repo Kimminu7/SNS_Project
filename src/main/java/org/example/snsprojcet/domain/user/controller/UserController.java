@@ -2,7 +2,7 @@ package org.example.snsprojcet.domain.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.snsprojcet.domain.user.dto.FriendResponseDto;
+import org.example.snsprojcet.domain.user.dto.AnotherUserResponseDto;
 import org.example.snsprojcet.domain.user.dto.UpdatePasswordRequestDto;
 import org.example.snsprojcet.domain.user.dto.UserResponseDto;
 import org.example.snsprojcet.domain.user.dto.UserDeleteRequestDto;
@@ -27,20 +27,20 @@ public class UserController {
         UserSignUpResponseDto userSignUpResponseDto = userService.signUp(requestDto.getName(), requestDto.getAge(), requestDto.getNickname(), requestDto.getEmail(), requestDto.getPassword(), requestDto.getIntroduction());
         return new ResponseEntity<>(userSignUpResponseDto, HttpStatus.CREATED);
     }
-    // 유저 프로필 단 건 조회
-    @GetMapping("/{userId}/profile")
+    // 내 프로필 조회
+    @GetMapping("/myProfile/{userId}")
     public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long userId) {
         UserResponseDto userResponseDto = userService.findUserById(userId);
 
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
-    // 친구 프로필 단 건 조회
-    @GetMapping("/{friendId}/profile")
-    public ResponseEntity<FriendResponseDto> findfriendById(@PathVariable Long userId) {
-        FriendResponseDto friendResponseDto = userService.findFriendById(userId);
+    // 다른 유저 프로필 단 건 조회
+    @GetMapping("/profile")
+    public ResponseEntity<AnotherUserResponseDto> findUserByNickname(@RequestParam String nickname) {
+        AnotherUserResponseDto anotherUserResponseDto = userService.findUserByNickname(nickname);
 
-        return new ResponseEntity<>(friendResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(anotherUserResponseDto, HttpStatus.OK);
     }
 
 

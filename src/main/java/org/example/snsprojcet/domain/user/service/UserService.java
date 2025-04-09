@@ -3,7 +3,7 @@ package org.example.snsprojcet.domain.user.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.common.config.PasswordEncoder;
-import org.example.snsprojcet.domain.user.dto.FriendResponseDto;
+import org.example.snsprojcet.domain.user.dto.AnotherUserResponseDto;
 import org.example.snsprojcet.domain.user.dto.UserResponseDto;
 import org.example.snsprojcet.domain.user.dto.UserSignUpResponseDto;
 import org.example.snsprojcet.domain.user.entity.User;
@@ -43,10 +43,10 @@ public class UserService {
     }
 
     // 다른 유저 찾기
-    public FriendResponseDto findFriendById(Long userId) {
-        User findFriend = userRepository.findUserByIdOrElseThrow(userId);
+    public AnotherUserResponseDto findUserByNickname(String nickname) {
+        User findAnotherUser = userRepository.findUserByNickname(nickname);
 
-        return new FriendResponseDto(findFriend.getNickname(), findFriend.getIntroduction());
+        return new AnotherUserResponseDto(findAnotherUser.getNickname(), findAnotherUser.getIntroduction());
     }
 
     // 비밀번호 수정
