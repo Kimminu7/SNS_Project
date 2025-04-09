@@ -45,7 +45,7 @@ public class BoardController {
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }
 
-    // 게시판 단건 조회
+    // 게시판 상세 조회
     @GetMapping("/{id}")
     public ResponseEntity<BoardResponseDto> findById(@PathVariable Long id) {
 

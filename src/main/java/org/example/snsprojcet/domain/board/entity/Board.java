@@ -1,6 +1,7 @@
 package org.example.snsprojcet.domain.board.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.snsprojcet.domain.user.entity.User;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "board")
 public class Board {
 

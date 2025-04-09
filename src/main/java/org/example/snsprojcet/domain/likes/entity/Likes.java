@@ -31,6 +31,6 @@ public class Likes {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // BaseEntity사용? 수정일 생성일?
+
 
 }
