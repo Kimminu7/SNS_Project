@@ -26,7 +26,8 @@ public class FriendController {
     public ResponseEntity<String> sendFriendRequest(@RequestBody FriendRequestDto dto, User user) {
         User request = userService.getUserById(dto.getRequestId());// 송신자 사용자 받아오기
         User receiver = userService.getUserById(dto.getReceiverId()); // 수신자 유저 받아오기
-
+        //
+        //
         Friend friend = friendService.sendFriendRequest(request, receiver);
         return ResponseEntity.ok("친구 요청이 성공적으로 전송되었습니다.");
     }
@@ -68,7 +69,7 @@ public class FriendController {
 
     // 받은 요청 목록
     @GetMapping("/receivedList")
-    public ResponseEntity<List<FriendResponseDto>> receivedRequests(@RequestParam String email) {
+    public ResponseEntity<List<FriendResponseDto>> receivedRequests(String email) {
         User loginUser = userService.getLoginUser(email);
         List<FriendResponseDto> list = friendService.getReceivedRequests(loginUser)
                 .stream().map(FriendResponseDto::new).collect(Collectors.toList());
@@ -77,7 +78,7 @@ public class FriendController {
 
     //친구목록
     @GetMapping
-    public ResponseEntity<List<FriendResponseDto>> getFriendList(@RequestParam String email) {
+    public ResponseEntity<List<FriendResponseDto>> getFriendList(String email) {
         User loginUser = userService.getLoginUser(email);
         List<User> friends = friendService.getFriendList(loginUser);
 

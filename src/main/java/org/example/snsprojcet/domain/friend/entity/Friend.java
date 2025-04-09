@@ -44,4 +44,5 @@ public class Friend {
     public void reject() {
         this.status = FriendStatus.REJECTED;
     }
+
 }

@@ -46,6 +46,7 @@ public class FriendService {
 
     // 내가 받은 친구 요청 목록
     public List<Friend> getReceivedRequests(User user) {
+
         return friendRepository.findByUserreceiver(user);
     }
     // 친구 목록 조회
