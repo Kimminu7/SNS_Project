@@ -43,6 +43,7 @@ public class UserController {
         return new ResponseEntity<>(friendResponseDto, HttpStatus.OK);
     }
 
+
     // 유저 프로필(비밀번호) 수정
     @PutMapping("/{id}")
     public ResponseEntity<Void> updatePassword(

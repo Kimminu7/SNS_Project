@@ -6,7 +6,7 @@ import org.example.snsprojcet.domain.friend.dto.FriendResponseDto;
 import org.example.snsprojcet.domain.friend.entity.Friend;
 import org.example.snsprojcet.domain.friend.service.FriendService;
 import org.example.snsprojcet.domain.user.entity.User;
-import org.example.snsprojcet.domain.user.repository.UserRepository;
+import org.example.snsprojcet.domain.user.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,13 +19,13 @@ import java.util.stream.Collectors;
 public class FriendController {
 
     private final FriendService friendService;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     // 친구 요청 보내기
     @PostMapping("/request")
     public ResponseEntity<FriendResponseDto> sendFriendRequest(@RequestBody FriendRequestDto dto, User user) {
-        User loginUser  = getLoginUser(user); // 로그인 사용자 받아오기
-        User receiver = getUserById(dto.getReceiverId()); // 수신자 유저 받아오기
+        User loginUser  = userService.getLoginUser(user); // 로그인 사용자 받아오기
+        User receiver = userService.getUserById(dto.getReceiverId()); // 수신자 유저 받아오기
 
         Friend friend = friendService.sendFriendRequest(loginUser, receiver);
         return ResponseEntity.ok(new FriendResponseDto(friend));
@@ -47,7 +47,7 @@ public class FriendController {
     // 친구 삭제
     @DeleteMapping("/{friendId}")
     public ResponseEntity<String> deleteFriend(@PathVariable Long friendId, User user) {
-        User loginUser  = getLoginUser(user);
+        User loginUser  = userService.getLoginUser(user);
         friendService.deleteFriend(friendId, loginUser);
         return ResponseEntity.ok("친구가 삭제되었습니다.");
     }
@@ -55,7 +55,7 @@ public class FriendController {
     // 보낸 요청 목록
     @GetMapping("/sent")
     public ResponseEntity<List<FriendResponseDto>> sentRequests(User user) {
-        User loginUser = getLoginUser(user);
+        User loginUser = userService.getLoginUser(user);
         List<FriendResponseDto> list =
                 friendService
                         .getSentRequests(loginUser)
@@ -69,7 +69,7 @@ public class FriendController {
     // 받은 요청 목록
     @GetMapping("/received")
     public ResponseEntity<List<FriendResponseDto>> receivedRequests(User user) {
-        User loginUser  = getLoginUser(user);
+        User loginUser = userService.getLoginUser(user);
         List<FriendResponseDto> list = friendService.getReceivedRequests(loginUser)
                 .stream().map(FriendResponseDto::new).collect(Collectors.toList());
         return ResponseEntity.ok(list);
@@ -78,7 +78,7 @@ public class FriendController {
     //친구목록
     @GetMapping("/list")
     public ResponseEntity<List<FriendResponseDto>> getFriendList(User user) {
-        User loginUser  = getLoginUser(user);
+        User loginUser = userService.getLoginUser(user);
         List<User> friends = friendService.getFriendList(loginUser);
 
         List<FriendResponseDto> list = friends.stream()
@@ -86,18 +86,5 @@ public class FriendController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(list);
-    }
-
-    // 실제 구현 시에는 로그인 유저 정보나 UserService에서 받아와야 함 수정 해야하는 사항 이름 가져오기
-    private User getLoginUser(User user) {
-        //  UserService에서 가져와야 함
-        return userRepository.findUserByEmailOrElseThrow(user.getEmail());
-        // userservice.findByUserName()그런식으로
-    }
-    //임시 수신자 정보 가져오기
-    private User getUserById(Long id) {
-        // 실제로는 UserService 또는 Repository 통해 조회
-        // 필요 시 수정 userservice.findById()든
-        return userRepository.findUserByIdOrElseThrow(id);
     }
 }

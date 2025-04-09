@@ -103,4 +103,16 @@ public class UserService {
         userRepository.delete(userByIdOrElseThrow);
     }
 
+    // 실제 구현 시에는 로그인 유저 정보나 UserService에서 받아와야 함 수정 해야하는 사항 이름 가져오기
+    public User getLoginUser(User user) {
+        //  UserService에서 가져와야 함
+        return userRepository.findUserByEmailOrElseThrow(user.getEmail());
+        // userservice.findByUserName()그런식으로
+    }
+    //임시 수신자 정보 가져오기
+    public User getUserById(Long id) {
+        // 실제로는 UserService 또는 Repository 통해 조회
+        // 필요 시 수정 userservice.findById()든
+        return userRepository.findUserByIdOrElseThrow(id);
+    }
 }
