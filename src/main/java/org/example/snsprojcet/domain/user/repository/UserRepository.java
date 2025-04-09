@@ -18,20 +18,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     }
 
     // userId로 회원 정보 찾기
-    Optional<User> findUserById (Long id);
+    Optional<User> findUserById (Long userId);
 
-    default User findUserByIdOrElseThrow(Long id) {
-        return findUserById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 id입니다."));
+    default User findUserByIdOrElseThrow(Long userId) {
+        return findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 id입니다."));
     }
 
     boolean existsByEmail (String email);
-    default User findByIdOrElseThrow(Long id) {
-        return findById(id)
-                .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                "비밀번호를 조회할 수 없습니다 = " + id
-                        )
-                );
-    }
+
 }

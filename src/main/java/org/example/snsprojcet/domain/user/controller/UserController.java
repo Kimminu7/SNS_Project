@@ -28,38 +28,38 @@ public class UserController {
         return new ResponseEntity<>(userSignUpResponseDto, HttpStatus.CREATED);
     }
     // 유저 프로필 단 건 조회
-    @GetMapping("/{id}/profile")
-    public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long id) {
-        UserResponseDto userResponseDto = userService.findUserById(id);
+    @GetMapping("/{userId}/profile")
+    public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long userId) {
+        UserResponseDto userResponseDto = userService.findUserById(userId);
 
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
     // 친구 프로필 단 건 조회
     @GetMapping("/{friendId}/profile")
-    public ResponseEntity<FriendResponseDto> findfriendById(@PathVariable Long id) {
-        FriendResponseDto friendResponseDto = userService.findFriendById(id);
+    public ResponseEntity<FriendResponseDto> findfriendById(@PathVariable Long userId) {
+        FriendResponseDto friendResponseDto = userService.findFriendById(userId);
 
         return new ResponseEntity<>(friendResponseDto, HttpStatus.OK);
     }
 
 
     // 유저 프로필(비밀번호) 수정
-    @PutMapping("/{id}")
+    @PutMapping("/{userId}")
     public ResponseEntity<Void> updatePassword(
-            @PathVariable Long id,
+            @PathVariable Long userId,
             @RequestBody UpdatePasswordRequestDto requestDto
     ) {
 
-        userService.updatePassword(id, requestDto.getOldPassword(), requestDto.getNewPassword());
+        userService.updatePassword(userId, requestDto.getOldPassword(), requestDto.getNewPassword());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // 회원 탈퇴
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete (@PathVariable Long id, @RequestBody UserDeleteRequestDto requestDto) {
-        userService.deleteUser(id, requestDto.getPassword());
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<String> delete (@PathVariable Long userId, @RequestBody UserDeleteRequestDto requestDto) {
+        userService.deleteUser(userId, requestDto.getPassword());
         return ResponseEntity.ok("회원 탈퇴 성공!");
     }
 }

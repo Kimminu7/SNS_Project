@@ -36,26 +36,24 @@ public class UserService {
         return new UserSignUpResponseDto(userSignUp.getId(), userSignUp.getName(), userSignUp.getAge(), userSignUp.getNickname(), userSignUp.getEmail(), userSignUp.getIntroduction());
 
     }
-    public UserResponseDto findUserById(Long id) {
-        User findUser = userRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "유저 프로필을 조회할 수 없습니다. :" + id)
-        );
-
+    // 나 찾기
+    public UserResponseDto findUserById(Long userId) {
+        User findUser = userRepository.findUserByIdOrElseThrow(userId);
         return new UserResponseDto(findUser.getName(), findUser.getAge(), findUser.getNickname(), findUser.getIntroduction());
     }
 
-    public FriendResponseDto findFriendById(Long id) {
-        User findFriend = userRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "친구 프로필을 조회할 수 없습니다. :" + id)
-        );
+    // 다른 유저 찾기
+    public FriendResponseDto findFriendById(Long userId) {
+        User findFriend = userRepository.findUserByIdOrElseThrow(userId);
 
         return new FriendResponseDto(findFriend.getNickname(), findFriend.getIntroduction());
     }
 
+    // 비밀번호 수정
     @Transactional
-    public void updatePassword(Long id, String oldPassword, String newPassword) {
+    public void updatePassword(Long userId, String oldPassword, String newPassword) {
 
-        User findUser = userRepository.findByIdOrElseThrow(id);
+        User findUser = userRepository.findUserByIdOrElseThrow(userId);
 
         // 1. 현재 비밀번호 일치하지 않음
 
@@ -89,9 +87,9 @@ public class UserService {
 
     // 회원 탈퇴
     @Transactional
-    public void deleteUser(Long id, String password) {
+    public void deleteUser(Long userId, String password) {
         // id로 유저 조회
-        User userByIdOrElseThrow = userRepository.findUserByIdOrElseThrow(id);
+        User userByIdOrElseThrow = userRepository.findUserByIdOrElseThrow(userId);
         // 비밀번호 검증
         if (!passwordEncoder.match(password, userByIdOrElseThrow.getPassword())) {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
@@ -110,9 +108,9 @@ public class UserService {
         // userservice.findByUserName()그런식으로
     }
     //임시 수신자 정보 가져오기
-    public User getUserById(Long id) {
+    public User getUserById(Long userId) {
         // 실제로는 UserService 또는 Repository 통해 조회
         // 필요 시 수정 userservice.findById()든
-        return userRepository.findUserByIdOrElseThrow(id);
+        return userRepository.findUserByIdOrElseThrow(userId);
     }
 }
