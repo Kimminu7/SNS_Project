@@ -56,12 +56,7 @@ public class UserService {
         User findUser = userRepository.findUserByIdOrElseThrow(userId);
 
         // 1. 현재 비밀번호 일치하지 않음
-
-//        if (!passwordEncoder.matches(oldPassword, findUser.getPassword())) {         // 비밀번호가 해시 처리돼 있다면 PasswordEncoder.matches()를 사용해야 한다.
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
-//        }
-
-        if (!findUser.getPassword().equals(oldPassword)) {
+        if (!PasswordEncoder.match(oldPassword, findUser.getPassword())) {         // 비밀번호가 해시 처리돼 있다면 PasswordEncoder.matches()를 사용해야 한다.
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
 
@@ -71,7 +66,7 @@ public class UserService {
         }
 
         // 3. 새 비밀번호가 기존과 같은 경우
-        if (oldPassword.equals(newPassword)) {
+        if (PasswordEncoder.match(newPassword, findUser.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "현재 비밀번호와 다른 비밀번호를 입력해주세요.");
         }
 

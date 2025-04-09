@@ -12,7 +12,7 @@ public class PasswordEncoder {
     }
 
     // 비밀번호 일치 검증
-    public boolean match(String rawPassword, String encodedPassword) {
+    public static boolean match(String rawPassword, String encodedPassword) {
         BCrypt.Result result = BCrypt.verifyer().verify(rawPassword.toCharArray(), encodedPassword);
         return result.verified;
     }
