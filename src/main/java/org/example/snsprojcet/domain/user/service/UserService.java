@@ -117,13 +117,15 @@ public class UserService {
     }
 
     // 실제 구현 시에는 로그인 유저 정보나 UserService에서 받아와야 함 수정 해야하는 사항 이름 가져오기
-    public User getLoginUser(String nickname) {
+    public User findById (Long id) {
         //  UserService에서 가져와야 함
-        return userRepository.findUserByNicknameOrElseThrow(nickname);
+        return userRepository.findUserByIdOrElseThrow(id);
         // userservice.findByUserName()그런식으로
     }
+
+
     //임시 수신자 정보 가져오기
-    public User getUserByNickname(String nickname) {
+    public User findByNickname (String nickname) {
         // 실제로는 UserService 또는 Repository 통해 조회
         // 필요 시 수정 userservice.findById()든
         return userRepository.findUserByNicknameOrElseThrow(nickname);
