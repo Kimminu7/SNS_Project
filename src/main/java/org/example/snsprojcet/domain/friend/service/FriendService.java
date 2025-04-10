@@ -100,6 +100,4 @@ public class FriendService {
 
         return false;  // 친구 관계가 존재하지 않으면 삭제할 수 없음
     }
-
-
 }

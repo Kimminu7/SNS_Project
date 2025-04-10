@@ -4,16 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.snsprojcet.domain.user.dto.AnotherUserResponseDto;
-import org.example.snsprojcet.domain.user.dto.UpdatePasswordRequestDto;
-import org.example.snsprojcet.domain.user.dto.UserResponseDto;
-import org.example.snsprojcet.domain.user.dto.UserDeleteRequestDto;
-import org.example.snsprojcet.domain.user.dto.UserSignUpRequestDto;
-import org.example.snsprojcet.domain.user.dto.UserSignUpResponseDto;
+import org.example.snsprojcet.domain.user.dto.*;
 import org.example.snsprojcet.domain.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -40,6 +37,13 @@ public class UserController {
         }
         UserResponseDto userResponseDto = userService.findUserById(userId);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+    }
+
+    // 전체 유저 목록 조회
+    @GetMapping("/List")
+    public ResponseEntity<List<AllUserResponseDto>> findAllUser () {
+        List<AllUserResponseDto> allUser = userService.findAllUser();
+        return new ResponseEntity<>(allUser, HttpStatus.OK);
     }
 
     // 다른 유저 프로필 단 건 조회

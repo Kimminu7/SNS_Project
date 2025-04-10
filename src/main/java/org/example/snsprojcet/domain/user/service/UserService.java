@@ -3,10 +3,9 @@ package org.example.snsprojcet.domain.user.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.common.config.PasswordEncoder;
-import org.example.snsprojcet.domain.board.entity.Board;
 import org.example.snsprojcet.domain.board.repository.BoardRepository;
-import org.example.snsprojcet.domain.comment.entity.Comment;
 import org.example.snsprojcet.domain.comment.repository.CommentRepository;
+import org.example.snsprojcet.domain.user.dto.AllUserResponseDto;
 import org.example.snsprojcet.domain.user.dto.AnotherUserResponseDto;
 import org.example.snsprojcet.domain.user.dto.UserResponseDto;
 import org.example.snsprojcet.domain.user.dto.UserSignUpResponseDto;
@@ -46,6 +45,19 @@ public class UserService {
         User userSignUp = userRepository.save(user);
         return new UserSignUpResponseDto(userSignUp.getId(), userSignUp.getName(), userSignUp.getAge(), userSignUp.getNickname(), userSignUp.getEmail(), userSignUp.getIntroduction());
 
+    }
+    // 전체 유저 목록 조회
+    public List<AllUserResponseDto> findAllUser() {
+
+        return userRepository.findAll()
+                .stream()
+                .map(user -> new AllUserResponseDto(
+                        user.getId(),
+                        user.getName(),
+                        user.getNickname(),
+                        user.getIntroduction()
+                ))
+                .toList();
     }
     // 나 찾기
     public UserResponseDto findUserById(Long userId) {
@@ -105,9 +117,6 @@ public class UserService {
         if (!userByIdOrElseThrow.getActivated()) {
             throw new RuntimeException("이미 가입된 적이 있는 email입니다.");
         }
-        // 친구 삭제
-        // 친구 보낸 요청 삭제
-        // 친구 받은 요청 삭제
         // 댓글 삭제
         commentRepository.deleteAll(commentRepository.findByUser(userByIdOrElseThrow));
         // 게시글 삭제
