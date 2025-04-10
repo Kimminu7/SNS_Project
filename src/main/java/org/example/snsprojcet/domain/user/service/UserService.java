@@ -3,6 +3,10 @@ package org.example.snsprojcet.domain.user.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.common.config.PasswordEncoder;
+import org.example.snsprojcet.domain.board.entity.Board;
+import org.example.snsprojcet.domain.board.repository.BoardRepository;
+import org.example.snsprojcet.domain.comment.entity.Comment;
+import org.example.snsprojcet.domain.comment.repository.CommentRepository;
 import org.example.snsprojcet.domain.user.dto.AnotherUserResponseDto;
 import org.example.snsprojcet.domain.user.dto.UserResponseDto;
 import org.example.snsprojcet.domain.user.dto.UserSignUpResponseDto;
@@ -11,6 +15,8 @@ import org.example.snsprojcet.domain.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 import static org.example.snsprojcet.common.config.PasswordEncoder.match;
 
@@ -22,7 +28,10 @@ public class UserService {
     private final UserRepository userRepository;
     // encoder 접근
     private final PasswordEncoder passwordEncoder;
-
+    // commentRepository 접근
+    private final CommentRepository commentRepository;
+    // boardRepository 접근
+    private final BoardRepository boardRepository;
     // 회원 가입
     public UserSignUpResponseDto signUp(String name, Long age, String nickname, String email, String password, String introduction) {
         // 중복된 email인지 검증
@@ -96,6 +105,14 @@ public class UserService {
         if (!userByIdOrElseThrow.getActivated()) {
             throw new RuntimeException("이미 가입된 적이 있는 email입니다.");
         }
+        // 친구 삭제
+        // 친구 보낸 요청 삭제
+        // 친구 받은 요청 삭제
+        // 댓글 삭제
+        commentRepository.deleteAll(commentRepository.findByUser(userByIdOrElseThrow));
+        // 게시글 삭제
+        boardRepository.deleteAll(boardRepository.findByUser(userByIdOrElseThrow));
+        // 유저 삭제
         userRepository.delete(userByIdOrElseThrow);
     }
 

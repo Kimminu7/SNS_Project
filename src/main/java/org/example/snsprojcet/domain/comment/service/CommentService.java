@@ -44,7 +44,7 @@ public class CommentService {
 
     // 특정 게시글 특정 댓글 조회 기능
     public CommentResponseDto findById(Long id) {
-        Comment findComment = commentRepository.findByIdOrElseThorw(id);
+        Comment findComment = commentRepository.findByIdOrElseThrow(id);
         User writer = findComment.getUser();
 
         return new CommentResponseDto(findComment.getId(), findComment.getContent());
@@ -53,7 +53,7 @@ public class CommentService {
     // 특정 게시글 특정 댓글 수정 ( 내용만 수정, 작성자 or 게시글 작성자만 가능 )
     @Transactional
     public CommentResponseDto update(Long commentId, Long userId, String content) {
-        Comment comment = commentRepository.findByIdOrElseThorw(commentId);
+        Comment comment = commentRepository.findByIdOrElseThrow(commentId);
 
         // 게시글 작성자, 댓글 작성자 확인여부 기능
         validatePermission(comment, userId);
