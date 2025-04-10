@@ -8,14 +8,14 @@ import org.example.snsprojcet.domain.user.entity.User;
 @Getter
 public class FriendResponseDto {
     private Long id;
-    private Long requesterId;
-    private Long receiverId;
+    private String requesterNickname;
+    private String receiverNickname;
     private String status;
 
     public FriendResponseDto(Friend friend) {
         this.id = friend.getId();
-        this.requesterId = friend.getUserrequest().getId();
-        this.receiverId = friend.getUserreceiver().getId();
+        this.requesterNickname = friend.getUserrequest().getNickname();
+        this.receiverNickname = friend.getUserreceiver().getNickname();
         this.status = friend.getStatus().name();
     }
 

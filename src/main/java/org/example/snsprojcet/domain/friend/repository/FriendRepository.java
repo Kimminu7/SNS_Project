@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FriendRepository extends JpaRepository<Friend,Long> {
 
@@ -19,4 +20,6 @@ public interface FriendRepository extends JpaRepository<Friend,Long> {
     //친구 조회
     @Query("SELECT f FROM Friend f WHERE (f.userrequest = :user OR f.userreceiver = :user) AND f.status = :status")
     List<Friend> findAcceptedFriends(FriendStatus friendStatus, User user);
+
+    Optional<Friend> findByUserrequestAndUserreceiver(User request, User receiver);
 }
