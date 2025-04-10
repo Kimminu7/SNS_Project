@@ -1,6 +1,7 @@
 package org.example.snsprojcet.domain.board.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.snsprojcet.domain.board.dto.BoardDetailReponseDto;
 import org.example.snsprojcet.domain.board.dto.BoardResponseDto;
 import org.example.snsprojcet.domain.board.dto.CreateBoardRequestDto;
 import org.example.snsprojcet.domain.board.dto.UpdateRequestDto;
@@ -47,9 +48,9 @@ public class BoardController {
 
     // 게시판 상세 조회
     @GetMapping("/{id}")
-    public ResponseEntity<BoardResponseDto> findById(@PathVariable Long id) {
+    public ResponseEntity<BoardDetailReponseDto> findById(@PathVariable Long id) {
 
-        BoardResponseDto responseDto = boardService.findById(id);
+        BoardDetailReponseDto responseDto = boardService.findById(id);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }

@@ -56,7 +56,7 @@ public class CommentController {
 
     // 특정 게시글의 댓글 수정
     @PutMapping("/{commentId}")
-    public ResponseEntity<CommentResponseDto> update(@PathVariable Long commentId, HttpServletRequest servletRequest, @Valid @RequestBody CommentRequestDto requestDto) {
+    public ResponseEntity<String> update(@PathVariable Long commentId, HttpServletRequest servletRequest, @Valid @RequestBody CommentRequestDto requestDto) {
         // 로그인 id 가져오기
         HttpSession session = servletRequest.getSession();
         Long userId = (Long) session.getAttribute("userId");
@@ -65,7 +65,7 @@ public class CommentController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // 수정
-        CommentResponseDto responseDto = commentService.update(commentId, userId, requestDto.getContent());
+        String responseDto = commentService.update(commentId, userId, requestDto.getContent());
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
