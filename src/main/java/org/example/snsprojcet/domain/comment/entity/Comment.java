@@ -4,10 +4,16 @@ import lombok.Getter;
 import jakarta.persistence.*;
 import org.example.snsprojcet.domain.board.entity.Board;
 import org.example.snsprojcet.domain.user.entity.User;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @Table(name = "comment")
+@EntityListeners(AuditingEntityListener.class)
 public class Comment {
 
     @Id
@@ -25,6 +31,14 @@ public class Comment {
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+
     public Comment() {
 
     }
@@ -33,10 +47,12 @@ public class Comment {
         this.content = content;
         this.user = user;
         this.board = board;
+        createdAt = LocalDateTime.now();
     }
 
     public void update(String content) {
         this.content = content;
+        updatedAt = LocalDateTime.now();
     }
 
 }

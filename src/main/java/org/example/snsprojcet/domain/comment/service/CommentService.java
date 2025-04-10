@@ -3,7 +3,6 @@ package org.example.snsprojcet.domain.comment.service;
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.domain.board.entity.Board;
 import org.example.snsprojcet.domain.board.repository.BoardRepository;
-import org.example.snsprojcet.domain.comment.dto.CommentRequestDto;
 import org.example.snsprojcet.domain.comment.dto.CommentResponseDto;
 import org.example.snsprojcet.domain.user.entity.User;
 import org.example.snsprojcet.domain.user.repository.UserRepository;
@@ -32,9 +31,9 @@ public class CommentService {
         User user = userRepository.findUserByIdOrElseThrow(userId);
         // 댓글 생성
         Comment comment = new Comment(content, user, board);
-        Comment saved = commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment);
 
-        return new CommentResponseDto(comment.getId(),comment.getContent());
+        return new CommentResponseDto(savedComment.getId(), savedComment.getUser().getNickname(), savedComment.getContent(), savedComment.getCreatedAt());
     }
 
     // 특정 게시글 댓글 전체 조회
@@ -47,12 +46,12 @@ public class CommentService {
         Comment findComment = commentRepository.findByIdOrElseThrow(id);
         User writer = findComment.getUser();
 
-        return new CommentResponseDto(findComment.getId(), findComment.getContent());
+        return new CommentResponseDto(findComment.getId(), writer.getNickname(), findComment.getContent(), findComment.getCreatedAt());
     }
 
     // 특정 게시글 특정 댓글 수정 ( 내용만 수정, 작성자 or 게시글 작성자만 가능 )
     @Transactional
-    public CommentResponseDto update(Long commentId, Long userId, String content) {
+    public String update(Long commentId, Long userId, String content) {
         Comment comment = commentRepository.findByIdOrElseThrow(commentId);
 
         // 게시글 작성자, 댓글 작성자 확인여부 기능
@@ -60,7 +59,7 @@ public class CommentService {
 
         comment.update(content);
 
-        return new CommentResponseDto(comment.getId(), comment.getContent());
+        return "댓글이 정상적으로 수정 되었습니다.";
     }
 
     // 특정 게시글 특정 댓글 삭제(작성자 or 게시글 작성자만 가능)
