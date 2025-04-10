@@ -73,21 +73,33 @@ public class FriendService {
     }
 
     //친구삭제 및 확인
-    public void deleteFriend(User currentUser, String nickname) {
-        User togetUser = userRepository.findUserByNicknameOrElseThrow(nickname);
+    public boolean deleteFriend(User loginUser, User friend) {
+        // 로그인한 사용자와 친구 간의 관계를 찾음
+        Friend relation = friendRepository.findByUserrequestAndUserreceiver(loginUser, friend);
 
-        Friend friend = friendRepository.findByUserrequestAndUserreceiver(currentUser, togetUser)
-                .orElseGet(() -> friendRepository.findByUserrequestAndUserreceiver(togetUser, currentUser)
-                        .orElseThrow(() -> new RuntimeException("친구 관계를 찾을 수 없습니다.")));
-
-        if (!friend.getUserrequest().equals(currentUser) && !friend.getUserreceiver().equals(currentUser)) {
-            throw new RuntimeException("이 친구 관계에 없는 사람입니다.");
+        // 만약 첫 번째 관계가 없으면, 반대 관계를 찾음 (친구가 로그인한 사용자에게 보낸 요청을 찾기)
+        if (relation == null) {
+            relation = friendRepository.findByUserreceiverAndUserrequest(loginUser, friend);
         }
 
-        if (friend.getStatus() != FriendStatus.ACCEPTED) {
-            throw new RuntimeException("수락된 친구만 삭제할 수 있습니다.");
+        // 친구 관계가 존재하면 삭제
+        if (relation != null) {
+            friendRepository.delete(relation);
+
+            // 반대편 관계도 삭제 (친구가 로그인한 사용자를 팔로우한 경우)
+            Friend reverseRelation = friendRepository.findByUserrequestAndUserreceiver(friend, loginUser);
+            if (reverseRelation == null) {
+                reverseRelation = friendRepository.findByUserreceiverAndUserrequest(friend, loginUser);
+            }
+            if (reverseRelation != null) {
+                friendRepository.delete(reverseRelation);
+            }
+
+            return true;  // 삭제 성공
         }
 
-        friendRepository.delete(friend);
+        return false;  // 친구 관계가 존재하지 않으면 삭제할 수 없음
     }
+
+
 }

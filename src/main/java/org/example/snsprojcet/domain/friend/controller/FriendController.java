@@ -1,5 +1,7 @@
 package org.example.snsprojcet.domain.friend.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.domain.friend.dto.FriendRequestDto;
 import org.example.snsprojcet.domain.friend.dto.FriendResponseDto;
@@ -25,8 +27,8 @@ public class FriendController {
     // 친구 요청 보내기
     @PostMapping("/request")
     public ResponseEntity<String> sendFriendRequest(@RequestBody FriendRequestDto dto, User user) {
-        User request = userService.getUserByNickname(dto.getRequestNickname());// 송신자 사용자 받아오기
-        User receiver = userService.getUserByNickname(dto.getReceiverNickname()); // 수신자 유저 받아오기
+        User request = userService.findByNickname(dto.getRequestNickname());// 송신자 사용자 받아오기
+        User receiver = userService.findByNickname(dto.getReceiverNickname()); // 수신자 유저 받아오기
         //
         //
         Friend friend = friendService.sendFriendRequest(request, receiver);
@@ -50,7 +52,7 @@ public class FriendController {
     // 보낸 요청 목록
     @GetMapping("/requestList")
     public ResponseEntity<List<FriendResponseDto>> sentRequests(@RequestParam String nickname) {
-        User loginUser = userService.getLoginUser(nickname);
+        User loginUser = userService.findByNickname(nickname);
         List<FriendResponseDto> list =
                 friendService
                         .getSentRequests(loginUser)
@@ -64,7 +66,7 @@ public class FriendController {
     // 받은 요청 목록
     @GetMapping("/receivedList")
     public ResponseEntity<List<FriendResponseDto>> receivedRequests(String nickname) {
-        User loginUser = userService.getLoginUser(nickname);
+        User loginUser = userService.findByNickname(nickname);
         List<FriendResponseDto> list = friendService.getReceivedRequests(loginUser)
                 .stream().map(FriendResponseDto::new).collect(Collectors.toList());
         return ResponseEntity.ok(list);
@@ -80,9 +82,23 @@ public class FriendController {
 
     // 친구 삭제
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteFriend(@RequestParam String nickname) {
-        User loginUser  = userService.getLoginUser(nickname);
-        friendService.deleteFriend(loginUser, nickname);
-        return ResponseEntity.ok("친구가 삭제되었습니다.");
+    public ResponseEntity<String> deleteFriend(HttpServletRequest request, @RequestParam String nickname) {
+        // 세션에서 로그인한 사용자 정보 가져오기
+        HttpSession session = request.getSession();
+        Long loginUserId = (Long) session.getAttribute("userId");
+
+        // 로그인한 사용자와 친구 정보를 가져오기
+        User loginUser = userService.findById(loginUserId);
+        User friend = userService.findByNickname(nickname);
+
+        // 친구 관계 삭제
+        boolean success = friendService.deleteFriend(loginUser, friend);
+
+        if (success) {
+            return ResponseEntity.ok("친구가 삭제되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("친구 삭제에 실패했습니다.");
+        }
     }
+
 }

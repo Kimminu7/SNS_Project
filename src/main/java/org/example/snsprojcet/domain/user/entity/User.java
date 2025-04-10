@@ -4,7 +4,11 @@ package org.example.snsprojcet.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.snsprojcet.domain.friend.entity.Friend;
 import org.hibernate.annotations.SQLDelete;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -47,7 +51,11 @@ public class User {
     @Column
     private Boolean activated;
 
+    @OneToMany(mappedBy = "userrequest")
+    private List<Friend> friendsRequested = new ArrayList<>();
 
+    @OneToMany(mappedBy = "userreceiver")
+    private List<Friend> friendsReceived = new ArrayList<>();
 
     public User (String name, Long age, String nickname, String email, String password, String introduction) {
         this.name = name;
