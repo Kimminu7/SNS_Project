@@ -16,4 +16,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     // 댓글 생성일자 기준 내림차순 정렬
     List<Comment> findByBoardIdOrderByCreatedAtDesc(Long boardId);
 
+    // 삭제할 게시물 id값
+    void deleteByBoardId(Long boardId);
+
 }

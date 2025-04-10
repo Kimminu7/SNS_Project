@@ -14,6 +14,7 @@ import org.example.snsprojcet.domain.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -85,11 +86,16 @@ public class BoardServiceImpl implements BoardService{
     }
 
     // 게시판 삭제
+    @Transactional
     @Override
     public String deleteBoard(Long id) {
 
         Board findMember = boardRepository.findByIdOrElseThrow(id);
 
+        // 댓글을 먼저 삭제
+        commentRepository.deleteByBoardId(id);
+
+        // 다음 게시판을 완전히 삭제
         boardRepository.delete(findMember);
 
         return "게시물이 정상적으로 삭제 되었습니다.";
