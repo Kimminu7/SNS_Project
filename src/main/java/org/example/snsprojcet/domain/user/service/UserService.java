@@ -48,9 +48,9 @@ public class UserService {
     }
     // 전체 유저 목록 조회
     public List<AllUserResponseDto> findAllUser() {
-
         return userRepository.findAll()
                 .stream()
+                .filter(User::getActivated) // activated가 true 인 회원만 조회(탈퇴하면 조회 X)
                 .map(user -> new AllUserResponseDto(
                         user.getId(),
                         user.getName(),
