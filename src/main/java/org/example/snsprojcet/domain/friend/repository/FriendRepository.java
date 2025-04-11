@@ -21,9 +21,8 @@ public interface FriendRepository extends JpaRepository<Friend,Long> {
     @Query("SELECT f FROM Friend f WHERE (f.userrequest = :user OR f.userreceiver = :user) AND f.status = :status")
     List<Friend> findAcceptedFriends(FriendStatus friendStatus, User user);
 
-    // userrequest는 친구 요청을 보내는 사람이고, userreceiver는 친구 요청을 받는 사람
-    Friend findByUserrequestAndUserreceiver(User userrequest, User userreceiver);
+    boolean existsByUserrequestAndUserreceiver(User from, User to);
 
-    // 반대편 관계도 찾기 위해 userreceiver와 userrequest를 반대로 사용
-    Friend findByUserreceiverAndUserrequest(User userreceiver, User userrequest);
+    Friend findByUserrequestAndUserreceiver(User from, User to);
+
 }

@@ -21,24 +21,43 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
-    // 친구 요청 보내기
+    /**
+     * 친구 추가 요청
+     * @param requester
+     * @param receiver
+     * @return
+     */
     public Friend sendFriendRequest(User requester, User receiver) {
+        if(friendRepository.existsByUserrequestAndUserreceiver(requester, receiver)){
+            throw new IllegalArgumentException("이미 요청을 보냈습니다.");
+        }
         return friendRepository.save(new Friend(requester, receiver, FriendStatus.PENDING));
     }
 
     // 친구 수락
     @Transactional
-    public void acceptFriendRequest(Long friendId) {
+    public void acceptFriendRequest(Long friendId, User loginUser) {
         Friend friend = friendRepository.findById(friendId)
                 .orElseThrow(() -> new IllegalArgumentException("친구 요청이 존재하지 않습니다."));
+        if(!friend.getUserreceiver().getId().equals(loginUser.getId())){
+            throw new IllegalArgumentException("친구 요청 수락 권한이 없습니다.");
+        }
         friend.accept();
+
+        Friend reverse = new Friend(friend.getUserreceiver(), friend.getUserrequest());
+        reverse.accept();
+        friendRepository.save(reverse);
     }
 
     // 친구 거절
     @Transactional
-    public void rejectFriendRequest(Long friendId) {
+    public void rejectFriendRequest(Long friendId, User loginUser) {
         Friend friend = friendRepository.findById(friendId)
                 .orElseThrow(() -> new IllegalArgumentException("친구 요청이 존재하지 않습니다."));
+
+        if(!friend.getUserreceiver().getId().equals(loginUser.getId())){
+            throw new IllegalArgumentException("친구 요청을 거절할 권한이 없습니다.");
+        }
         friend.reject();
     }
 
@@ -49,7 +68,6 @@ public class FriendService {
 
     // 내가 받은 친구 요청 목록
     public List<Friend> getReceivedRequests(User user) {
-
         return friendRepository.findByUserreceiver(user);
     }
 
@@ -73,31 +91,15 @@ public class FriendService {
     }
 
     //친구삭제 및 확인
-    public boolean deleteFriend(User loginUser, User friend) {
-        // 로그인한 사용자와 친구 간의 관계를 찾음
-        Friend relation = friendRepository.findByUserrequestAndUserreceiver(loginUser, friend);
+    @Transactional
+    public boolean deleteFriend(User user1, User user2) {
+        Friend f1 = friendRepository.findByUserrequestAndUserreceiver(user1, user2);
+        Friend f2 = friendRepository.findByUserrequestAndUserreceiver(user2, user1);
 
-        // 만약 첫 번째 관계가 없으면, 반대 관계를 찾음 (친구가 로그인한 사용자에게 보낸 요청을 찾기)
-        if (relation == null) {
-            relation = friendRepository.findByUserreceiverAndUserrequest(loginUser, friend);
-        }
+        if (f1 != null) friendRepository.delete(f1);
+        if (f2 != null) friendRepository.delete(f2);
 
-        // 친구 관계가 존재하면 삭제
-        if (relation != null) {
-            friendRepository.delete(relation);
-
-            // 반대편 관계도 삭제 (친구가 로그인한 사용자를 팔로우한 경우)
-            Friend reverseRelation = friendRepository.findByUserrequestAndUserreceiver(friend, loginUser);
-            if (reverseRelation == null) {
-                reverseRelation = friendRepository.findByUserreceiverAndUserrequest(friend, loginUser);
-            }
-            if (reverseRelation != null) {
-                friendRepository.delete(reverseRelation);
-            }
-
-            return true;  // 삭제 성공
-        }
-
-        return false;  // 친구 관계가 존재하지 않으면 삭제할 수 없음
+        return f1 != null || f2 != null;
     }
+
 }

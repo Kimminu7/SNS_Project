@@ -2,12 +2,23 @@ package org.example.snsprojcet.common.config;
 
 import jakarta.servlet.Filter;
 import org.example.snsprojcet.domain.auth.filter.LoginFilter;
+import org.example.snsprojcet.domain.auth.resolver.LoginUserArgumentResolver;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 @Configuration
-public class WebConfig {
+public class WebConfig implements WebMvcConfigurer {
+
+    private final LoginUserArgumentResolver loginUserArgumentResolver;
+
+    public WebConfig(LoginUserArgumentResolver loginUserArgumentResolver) {
+        this.loginUserArgumentResolver = loginUserArgumentResolver;
+    }
 
     @Bean
     public FilterRegistrationBean loginFilter () {
@@ -20,5 +31,10 @@ public class WebConfig {
         filterRegistrationBean.addUrlPatterns("/*");
 
         return filterRegistrationBean;
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(loginUserArgumentResolver); // LoginUserArgumentResolver 등록
     }
 }
