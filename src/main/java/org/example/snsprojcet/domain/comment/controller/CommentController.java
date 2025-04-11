@@ -1,8 +1,5 @@
 package org.example.snsprojcet.domain.comment.controller;
 
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.domain.auth.filter.LoginUser;
@@ -63,7 +60,4 @@ public class CommentController {
         commentService.delete(commentId, loginUser.getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
-
 }

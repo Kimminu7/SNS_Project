@@ -1,12 +1,9 @@
 package org.example.snsprojcet.domain.friend.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.domain.auth.filter.LoginUser;
 import org.example.snsprojcet.domain.friend.dto.FriendRequestDto;
 import org.example.snsprojcet.domain.friend.dto.FriendResponseDto;
-import org.example.snsprojcet.domain.friend.entity.Friend;
 import org.example.snsprojcet.domain.friend.service.FriendService;
 import org.example.snsprojcet.domain.user.entity.User;
 import org.example.snsprojcet.domain.user.service.UserService;
@@ -36,7 +33,7 @@ public class FriendController {
     }
 
     // 친구 수락 로그인
-    @PostMapping("/{friendId}/accept")
+    @PostMapping("/{friendid}/accept")
     public ResponseEntity<String> accept(@PathVariable Long friendId, @LoginUser User loginUser) {
 
         friendService.acceptFriendRequest(friendId, loginUser);
@@ -44,14 +41,14 @@ public class FriendController {
     }
 
     // 친구 거절
-    @PostMapping("/{friendId}/reject")
+    @PostMapping("/{friendid}/reject")
     public ResponseEntity<String> reject(@PathVariable Long friendId, @LoginUser User loginUser) {
         friendService.rejectFriendRequest(friendId, loginUser);
         return ResponseEntity.ok("친구 요청을 거절했습니다.");
     }
 
     // 보낸 요청 목록
-    @GetMapping("/requestList")
+    @GetMapping("/requestlist")
     public ResponseEntity<List<FriendResponseDto>> sentRequests(@LoginUser User loginUser) {
         List<FriendResponseDto> list =
                 friendService
@@ -64,7 +61,7 @@ public class FriendController {
     }
 
     // 받은 요청 목록
-    @GetMapping("/receivedList")
+    @GetMapping("/receivedlist")
     public ResponseEntity<List<FriendResponseDto>> receivedRequests(@LoginUser User loginUser) {
         List<FriendResponseDto> list = friendService.getReceivedRequests(loginUser)
                 .stream().map(FriendResponseDto::new).collect(Collectors.toList());
@@ -72,7 +69,7 @@ public class FriendController {
     }
 
     //친구목록
-    @GetMapping("/friendList")
+    @GetMapping("/friendlist")
     public ResponseEntity<List<String>> FriendList(@LoginUser User loginUser) {
         // 친구 목록 조회
         List<String> friendList = friendService.findAllFriendList(loginUser.getNickname());
@@ -93,5 +90,4 @@ public class FriendController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("친구 삭제에 실패했습니다.");
         }
     }
-
 }

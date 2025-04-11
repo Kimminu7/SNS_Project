@@ -28,16 +28,17 @@ public class UserController {
         UserSignUpResponseDto userSignUpResponseDto = userService.signUp(requestDto.getName(), requestDto.getAge(), requestDto.getNickname(), requestDto.getEmail(), requestDto.getPassword(), requestDto.getIntroduction());
         return new ResponseEntity<>(userSignUpResponseDto, HttpStatus.CREATED);
     }
+
     // 내 프로필 조회
-    @GetMapping("/profile/{userId}")
-    public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long userId, @LoginUser User loginUser) {
+    @GetMapping("/myprofile")
+    public ResponseEntity<UserResponseDto> findUserById(@LoginUser User loginUser) {
 
         UserResponseDto userResponseDto = userService.findUserById(loginUser.getId());
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
     // 전체 유저 목록 조회
-    @GetMapping("/List")
+    @GetMapping("/list")
     public ResponseEntity<List<AllUserResponseDto>> findAllUser () {
         List<AllUserResponseDto> allUser = userService.findAllUser();
         return new ResponseEntity<>(allUser, HttpStatus.OK);
@@ -50,7 +51,6 @@ public class UserController {
 
         return new ResponseEntity<>(anotherUserResponseDto, HttpStatus.OK);
     }
-
 
     // 유저 프로필(비밀번호) 수정
     @PutMapping("/{userId}")

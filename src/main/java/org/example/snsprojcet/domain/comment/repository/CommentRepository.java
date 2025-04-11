@@ -20,5 +20,4 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     // 삭제할 게시물 id값
     void deleteByBoardId(Long boardId);
-
 }

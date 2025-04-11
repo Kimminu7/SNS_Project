@@ -6,7 +6,6 @@ import org.example.snsprojcet.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-
 public interface BoardService {
 
     // 게시판 생성

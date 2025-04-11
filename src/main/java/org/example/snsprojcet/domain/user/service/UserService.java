@@ -31,6 +31,7 @@ public class UserService {
     private final CommentRepository commentRepository;
     // boardRepository 접근
     private final BoardRepository boardRepository;
+
     // 회원 가입
     public UserSignUpResponseDto signUp(String name, Long age, String nickname, String email, String password, String introduction) {
         // 중복된 email인지 검증
@@ -46,6 +47,7 @@ public class UserService {
         return new UserSignUpResponseDto(userSignUp.getId(), userSignUp.getName(), userSignUp.getAge(), userSignUp.getNickname(), userSignUp.getEmail(), userSignUp.getIntroduction());
 
     }
+
     // 전체 유저 목록 조회
     public List<AllUserResponseDto> findAllUser() {
         return userRepository.findAll()
@@ -59,13 +61,14 @@ public class UserService {
                 ))
                 .toList();
     }
-    // 나 찾기
+
+    // 내 정보 조회
     public UserResponseDto findUserById(Long userId) {
         User findUser = userRepository.findUserByIdOrElseThrow(userId);
         return new UserResponseDto(findUser.getName(), findUser.getAge(), findUser.getNickname(), findUser.getIntroduction());
     }
 
-    // 다른 유저 찾기
+    // 다른 유저 정보 조회
     public AnotherUserResponseDto findUserByNickname(String nickname) {
         User findAnotherUser = userRepository.findUserByNicknameOrElseThrow(nickname);
 
@@ -92,15 +95,15 @@ public class UserService {
         if (match(newPassword, findUser.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "현재 비밀번호와 다른 비밀번호를 입력해주세요.");
         }
-
-        findUser.updatePassword(newPassword);
+        // 새로 입력받은 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        findUser.updatePassword(encodedPassword);
     }
 
     // 비밀번호 형식 유효성 검사
     private boolean isValidPasswordFormat(String password) {
         String regex = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*\\W).{8,}$";   // 비밀번호는 대소문자 포함한 영문 + 숫자 + 특수문자를 최소 1글자씩 포함하며 최소 8글자 이상이어야 합니다
         return password != null && password.matches(regex);
-
     }
 
     // 회원 탈퇴
@@ -125,18 +128,13 @@ public class UserService {
         userRepository.delete(userByIdOrElseThrow);
     }
 
-    // 실제 구현 시에는 로그인 유저 정보나 UserService에서 받아와야 함 수정 해야하는 사항 이름 가져오기
+    // id 조회
     public User findById (Long id) {
-        //  UserService에서 가져와야 함
         return userRepository.findUserByIdOrElseThrow(id);
-        // userservice.findByUserName()그런식으로
     }
 
-
-    //임시 수신자 정보 가져오기
+    // nickname 조회
     public User findByNickname (String nickname) {
-        // 실제로는 UserService 또는 Repository 통해 조회
-        // 필요 시 수정 userservice.findById()든
         return userRepository.findUserByNicknameOrElseThrow(nickname);
     }
 }
