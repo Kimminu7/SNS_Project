@@ -32,6 +32,12 @@ public class Friend {
         this.status = status;
     }
 
+    public Friend(User userrequest, User userreceiver) {
+        this.userrequest = userrequest;
+        this.userreceiver = userreceiver;
+        this.status = FriendStatus.PENDING;
+    }
+
     @Enumerated(EnumType.STRING)
     private FriendStatus status;
 
