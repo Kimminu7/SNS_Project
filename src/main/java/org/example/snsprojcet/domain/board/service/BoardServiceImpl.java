@@ -74,9 +74,13 @@ public class BoardServiceImpl implements BoardService{
 
     // 게시판 수정
     @Override
-    public String updateBoard(Long id, String title, String contents) {
+    public String updateBoard(User loginUser, Long id, String title, String contents) {
 
         Board findBoard = boardRepository.findByIdOrElseThrow(id);
+
+        if (!findBoard.getUser().getId().equals(loginUser.getId())) {
+            throw new IllegalArgumentException("게시글 작성자만 수정할 수 있습니다.");
+        }
 
         findBoard.update(title, contents);
 
@@ -88,9 +92,14 @@ public class BoardServiceImpl implements BoardService{
     // 게시판 삭제
     @Transactional
     @Override
-    public String deleteBoard(Long id) {
+    public String deleteBoard(User loginUser,Long id) {
 
         Board findMember = boardRepository.findByIdOrElseThrow(id);
+
+        // 작성자 확인
+        if (!findMember.getUser().getId().equals(loginUser.getId())) {
+            throw new IllegalArgumentException("게시글 작성자만 삭제할 수 있습니다.");
+        }
 
         // 댓글을 먼저 삭제
         commentRepository.deleteByBoardId(id);

@@ -5,9 +5,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.snsprojcet.domain.auth.filter.LoginUser;
 import org.example.snsprojcet.domain.comment.dto.CommentRequestDto;
 import org.example.snsprojcet.domain.comment.dto.CommentResponseDto;
 import org.example.snsprojcet.domain.comment.service.CommentService;
+import org.example.snsprojcet.domain.user.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,17 +25,9 @@ public class CommentController {
 
     // 댓글 생성
     @PostMapping
-    public ResponseEntity<CommentResponseDto> saveComment (@PathVariable Long boardId, HttpServletRequest servletRequest, @Valid @RequestBody CommentRequestDto requestDto) {
-        // 로그인 id 받아오기
-        HttpSession session = servletRequest.getSession();
-        Long userId = (Long) session.getAttribute("userId");
+    public ResponseEntity<CommentResponseDto> saveComment (@PathVariable Long boardId, @LoginUser User loginUser, @Valid @RequestBody CommentRequestDto requestDto) {
 
-        // 로그인 확인 여부
-        if (userId == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        CommentResponseDto commentResponseDto = commentService.save(boardId, userId, requestDto.getContent());
+        CommentResponseDto commentResponseDto = commentService.save(boardId, loginUser.getId(), requestDto.getContent());
 
         return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
     }
@@ -56,30 +50,17 @@ public class CommentController {
 
     // 특정 게시글의 댓글 수정
     @PutMapping("/{commentId}")
-    public ResponseEntity<String> update(@PathVariable Long commentId, HttpServletRequest servletRequest, @Valid @RequestBody CommentRequestDto requestDto) {
-        // 로그인 id 가져오기
-        HttpSession session = servletRequest.getSession();
-        Long userId = (Long) session.getAttribute("userId");
-
-        if (userId == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity<String> update(@PathVariable Long commentId, @LoginUser User loginUser, @Valid @RequestBody CommentRequestDto requestDto) {
         // 수정
-        String responseDto = commentService.update(commentId, userId, requestDto.getContent());
+        String responseDto = commentService.update(commentId, loginUser.getId(), requestDto.getContent());
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
+    // 댓글 삭제
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<CommentResponseDto> delete( @PathVariable Long commentId, HttpServletRequest servletRequest) {
+    public ResponseEntity<CommentResponseDto> delete( @PathVariable Long commentId, @LoginUser User loginUser) {
 
-        HttpSession session = servletRequest.getSession();
-        Long userId = (Long) session.getAttribute("userId");
-
-        if (userId == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        commentService.delete(commentId, userId);
+        commentService.delete(commentId, loginUser.getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -1,11 +1,13 @@
 package org.example.snsprojcet.domain.board.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.snsprojcet.domain.auth.filter.LoginUser;
 import org.example.snsprojcet.domain.board.dto.BoardDetailReponseDto;
 import org.example.snsprojcet.domain.board.dto.BoardResponseDto;
 import org.example.snsprojcet.domain.board.dto.CreateBoardRequestDto;
 import org.example.snsprojcet.domain.board.dto.UpdateRequestDto;
 import org.example.snsprojcet.domain.board.service.BoardService;
+import org.example.snsprojcet.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,11 +28,11 @@ public class BoardController {
     // 게시판 생성
     @PostMapping
     public ResponseEntity<BoardResponseDto> createBoard(
-            @RequestParam Long userId,
+            @LoginUser User loginUser,
             @RequestBody CreateBoardRequestDto requestDto
     ) {
 
-        BoardResponseDto responseDto = boardService.createBoard(userId, requestDto.getTitle(), requestDto.getContents());
+        BoardResponseDto responseDto = boardService.createBoard(loginUser.getId(), requestDto.getTitle(), requestDto.getContents());
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
@@ -59,19 +61,20 @@ public class BoardController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateBoard(
             @PathVariable Long id,
+            @LoginUser User loginUser,
             @RequestBody UpdateRequestDto requestDto
     ) {
 
-        String responseDto = boardService.updateBoard(id, requestDto.getTitle(), requestDto.getContents());
+        String responseDto = boardService.updateBoard(loginUser, id, requestDto.getTitle(), requestDto.getContents());
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     // 게시글 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBoard(@PathVariable Long id) {
+    public ResponseEntity<String> deleteBoard(@PathVariable Long id, @LoginUser User loginUser) {
 
-        String responseDto = boardService.deleteBoard(id);
+        String responseDto = boardService.deleteBoard(loginUser, id);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
