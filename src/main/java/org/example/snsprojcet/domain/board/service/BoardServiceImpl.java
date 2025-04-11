@@ -84,7 +84,7 @@ public class BoardServiceImpl implements BoardService{
 
         findBoard.update(title, contents);
 
-        Board savedBoard = boardRepository.save(findBoard);
+        boardRepository.save(findBoard);
 
         return "게시물이 정상적으로 수정 되었습니다.";
     }

@@ -54,5 +54,4 @@ public class Comment {
         this.content = content;
         updatedAt = LocalDateTime.now();
     }
-
 }

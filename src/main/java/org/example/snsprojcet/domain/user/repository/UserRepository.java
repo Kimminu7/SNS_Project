@@ -24,8 +24,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
         return findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 id입니다."));
     }
 
+    // 탈퇴한 회원인지 boolean 값으로 반환
     boolean existsByEmail (String email);
 
+    // nickname으로 회원 정보 찾기
     Optional<User> findUserByNickname(String nickname);
 
     default User findUserByNicknameOrElseThrow(String nickname){

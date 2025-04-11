@@ -21,12 +21,7 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
-    /**
-     * 친구 추가 요청
-     * @param requester
-     * @param receiver
-     * @return
-     */
+    // 친구 요청 보내기
     public Friend sendFriendRequest(User requester, User receiver) {
         if(friendRepository.existsByUserrequestAndUserreceiver(requester, receiver)){
             throw new IllegalArgumentException("이미 요청을 보냈습니다.");

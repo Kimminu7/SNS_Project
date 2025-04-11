@@ -19,5 +19,4 @@ public class UserResponseDto {
         this.nickname = nickname;
         this.introduction = introduction;
     }
-
 }

@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.domain.auth.dto.LoginRequestDto;
 import org.example.snsprojcet.domain.auth.dto.LoginResponseDto;
 import org.example.snsprojcet.domain.auth.service.AuthService;
-import org.example.snsprojcet.domain.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

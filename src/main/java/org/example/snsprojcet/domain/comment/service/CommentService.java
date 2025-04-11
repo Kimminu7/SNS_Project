@@ -21,8 +21,6 @@ public class CommentService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
-    // 로직 방향: 회원가입 생성 -> 로그인 (유저id 보유) -> 일정 생성 (보드 id 보유) -> 일정 조회 (보드 id 받음) -> 댓글달기(유저 id, 보드 id 확인)
-
     // 댓글 작성 기능
     public CommentResponseDto save(Long boardId, Long userId, String content) {
 
@@ -85,9 +83,4 @@ public class CommentService {
             throw new IllegalArgumentException("해당 댓글에 대한 수정/삭제 권한이 없습니다.");
         }
     }
-
-
-
-
-
 }

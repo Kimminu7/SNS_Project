@@ -1,7 +1,5 @@
 package org.example.snsprojcet.domain.likes.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.snsprojcet.domain.auth.filter.LoginUser;
 import org.example.snsprojcet.domain.likes.service.LikeService;
@@ -19,7 +17,7 @@ public class LikeController {
     private final LikeService likeService;
 
     // 게시글 좋아요 토글
-    @PostMapping("/api/boards/{boardId}/likes")
+    @PostMapping("/api/boards/{boardid}/likes")
     public ResponseEntity<Boolean> likes(@PathVariable Long boardId, @LoginUser User loginUser){
 
         // 좋아요 눌렀는지 유무 확인
@@ -27,6 +25,4 @@ public class LikeController {
 
         return new ResponseEntity<>(liked, HttpStatus.OK);
     }
-
-
 }
