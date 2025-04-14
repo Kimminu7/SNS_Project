@@ -17,7 +17,7 @@ public class LikeController {
     private final LikeService likeService;
 
     // 게시글 좋아요 토글
-    @PostMapping("/api/boards/{boardid}/likes")
+    @PostMapping("/api/boards/{boardId}/likes")
     public ResponseEntity<Boolean> likes(@PathVariable Long boardId, @LoginUser User loginUser){
 
         // 좋아요 눌렀는지 유무 확인

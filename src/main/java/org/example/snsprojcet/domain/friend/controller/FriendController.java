@@ -33,7 +33,7 @@ public class FriendController {
     }
 
     // 친구 수락 로그인
-    @PostMapping("/{friendid}/accept")
+    @PostMapping("/{friendId}/accept")
     public ResponseEntity<String> accept(@PathVariable Long friendId, @LoginUser User loginUser) {
 
         friendService.acceptFriendRequest(friendId, loginUser);
@@ -41,7 +41,7 @@ public class FriendController {
     }
 
     // 친구 거절
-    @PostMapping("/{friendid}/reject")
+    @PostMapping("/{friendId}/reject")
     public ResponseEntity<String> reject(@PathVariable Long friendId, @LoginUser User loginUser) {
         friendService.rejectFriendRequest(friendId, loginUser);
         return ResponseEntity.ok("친구 요청을 거절했습니다.");
