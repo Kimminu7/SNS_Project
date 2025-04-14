@@ -20,7 +20,6 @@ public class UserSignUpRequestDto {
     private final String email;
 
     // 비밀번호
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*\\W).{8,}$", message = "비밀번호는 대소문자 포함한 영문 + 숫자 + 특수문자를 최소 1글자씩 포함하며 최소 8글자 이상이어야 합니다")
     private final String password;
 
     // 소개글

@@ -38,6 +38,10 @@ public class UserService {
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("이미 가입된 email입니다.");
         }
+        // 비밀번호 형식 유효성 검사
+        if (!isValidPasswordFormat(password)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호 형식이 올바르지 않습니다.");
+        }
         // 비밀번호 암호화 실시
         String encodedPassword = passwordEncoder.encode(password);
         // User 객체 생성
